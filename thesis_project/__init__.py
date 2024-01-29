@@ -1,0 +1,2 @@
+from thesis_project.models.model import MyNeuralNet
+from thesis_project.predict_model import predict
