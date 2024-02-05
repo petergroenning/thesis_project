@@ -7,7 +7,7 @@ name = "thesis_project"
 version = "0.0.1"
 description = "A short description of the project."
 authors = [
-  { name = "peter", email = "s183922@dtu.dk" },
+  { name = "peter", email = "s183922@dtu.dkc" },
 ]
 
 readme = "README.md"
