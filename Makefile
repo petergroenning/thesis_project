@@ -10,6 +10,7 @@
 
 PROJECT_NAME = thesis_project
 PYTHON_VERSION = 3.11
+R_VERSION = 4.3.2
 PYTHON_INTERPRETER = python
 
 #################################################################################
@@ -23,11 +24,10 @@ create_environment:
 
 setup_remote:
 	module load python3/${PYTHON_VERSION}
-	python3 -m venv .venv
-	source .venv/bin/activate
-	pip install --upgrade pip
-	make requirements
-	
+	module load R/${R_VERSION}-mkl2024
+	. .venv/bin/activate
+
+
 ## Install Python Dependencies
 requirements:
 	$(PYTHON_INTERPRETER) -m pip install -U pip setuptools wheel
