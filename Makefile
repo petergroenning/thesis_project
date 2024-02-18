@@ -20,6 +20,14 @@ PYTHON_INTERPRETER = python
 create_environment:
 	conda create --name $(PROJECT_NAME) python=$(PYTHON_VERSION) --no-default-packages -y
 
+
+setup_remote:
+	module load python3/${PYTHON_VERSION}
+	python3 -m venv .venv
+	source .venv/bin/activate
+	pip install --upgrade pip
+	make requirements
+	
 ## Install Python Dependencies
 requirements:
 	$(PYTHON_INTERPRETER) -m pip install -U pip setuptools wheel
