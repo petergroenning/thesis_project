@@ -15,7 +15,6 @@ d = np.linspace(0, 1, 16)
 def get_water_temp(idx):
     return water_sensors.iloc[idx]
 
-
 def get_input(idx):
     return inputs.iloc[idx]
 

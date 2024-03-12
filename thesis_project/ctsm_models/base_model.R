@@ -119,12 +119,14 @@ model <- ctsm$new()
     # TEMPERATURES
     model$setParameter(Tsoil = 15)
 
-    model$addInput("Ttop", "Tbot", "Tmid", "FtopIn", "FmidIn", "FbotIn", "FtopOut", "FbotOut", "FtopVol", "FmidVol", "FbotVol", "ambientTemp", "Ftop", "Fbot")
+    model$addInput("Ttop", "Tbot", "Tmid", "FtopIn", "FmidIn", "FbotIn", "FtopOut", "FbotOut","FmidOut", "FtopVol", "FmidVol", "FbotVol", "ambientTemp", "Ftop", "Fbot")
     model$addInput("b1x0","b1x1","b1x1","b1x2","b1x3","b1x4","b1x5","b1x6","b1x7","b1x8","b1x9","b1x10","b1x11","b1x12","b1x13","b1x14","b1x15")
     model$addInput("b2x0","b2x1","b2x1","b2x2","b2x3","b2x4","b2x5","b2x6","b2x7","b2x8","b2x9","b2x10","b2x11","b2x12","b2x13","b2x14","b2x15")
     model$addInput("b3x0","b3x1","b3x1","b3x2","b3x3","b3x4","b3x5","b3x6","b3x7","b3x8","b3x9","b3x10","b3x11","b3x12","b3x13","b3x14","b3x15")
     model$addInput("b4x0","b4x1","b4x1","b4x2","b4x3","b4x4","b4x5","b4x6","b4x7","b4x8","b4x9","b4x10","b4x11","b4x12","b4x13","b4x14","b4x15")
     model$addInput("b5x0","b5x1","b5x1","b5x2","b5x3","b5x4","b5x5","b5x6","b5x7","b5x8","b5x9","b5x10","b5x11","b5x12","b5x13","b5x14","b5x15")
+    model$addInput("b6x0","b6x1","b6x1","b6x2","b6x3","b6x4","b6x5","b6x6","b6x7","b6x8","b6x9","b6x10","b6x11","b6x12","b6x13","b6x14","b6x15")
+    model$addInput("b7x0","b7x1","b7x1","b7x2","b7x3","b7x4","b7x5","b7x6","b7x7","b7x8","b7x9","b7x10","b7x11","b7x12","b7x13","b7x14","b7x15")
 
 
  
