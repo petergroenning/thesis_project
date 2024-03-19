@@ -16,7 +16,7 @@ model$addSystem(dx11m~dt/V11*((x10m-x11m)*A11*k/Cp+(x12m-x11m)*A12*k/Cp-FtopOut*
 model$addSystem(dx12m~dt/V12*((x11m-x12m)*A12*k/Cp+(x13m-x12m)*A13*k/Cp-FtopOut*(x12m-x11m)+FtopIn*(x13m-x12m)+(Tmid-x12m)*FmidIn*v12)+sigma_x*dw12)
 model$addSystem(dx13m~dt/V13*((x12m-x13m)*A13*k/Cp+(x14m-x13m)*A14*k/Cp-FtopOut*(x13m-x12m)+FtopIn*(x14m-x13m))+sigma_x*dw13)
 model$addSystem(dx14m~dt/V14*((x13m-x14m)*A14*k/Cp+(x15m-x14m)*A15*k/Cp-FtopOut*(x14m-x13m)+FtopIn*(x15m-x14m))+sigma_x*dw14)
-model$addSystem(dx15m~dt/V15*((x14m-x15m)*A15*k/Cp+(ambientTemp-x15m)*Atop*ktop/Cp-1/2*FtopOut*(x15m-x14m)+(Ttop-x15m)*FtopIn)+sigma_x*dw15)
+model$addSystem(dx15m~dt/V15*((x14m-x15m)*A15*k/Cp+(ambientTemp-x15m)*Atop*ktop/Cp-FtopOut*(x15m-x14m)+(Ttop-x15m)*FtopIn)+sigma_x*dw15)
 
 
 
