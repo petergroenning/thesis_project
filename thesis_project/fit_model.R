@@ -22,10 +22,10 @@ load_model<-function(path){
     load(path)
     return(fit)
 }
-fit <- load_model(paste0('models/CTSM/',old_model_name, '.RData'))
+#fit <- load_model(paste0('models/CTSM/',old_model_name, '.RData'))
 
 
-model <- setParams(model, fit)
+#model <- setParams(model, fit)
 model <- setInitialState(model, data)
 
 model$options$eps <- 1e-3

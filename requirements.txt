@@ -6,4 +6,3 @@ xlrd
 pyarrow
 ipykernel
 tqdm
-pytables

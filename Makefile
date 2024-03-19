@@ -11,7 +11,7 @@
 PROJECT_NAME = thesis_project
 PYTHON_VERSION = 3.11
 R_VERSION = 4.3.2
-PYTHON_INTERPRETER = python
+PYTHON_INTERPRETER = python3
 
 #################################################################################
 # COMMANDS                                                                      #
