@@ -1,4 +1,4 @@
-makefit <- function(model, data){
+makefit <- function(model){
     ## Needs to be runned for simulate to work
 
 

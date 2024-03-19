@@ -195,28 +195,19 @@ ggplot(data[interval,],aes(x=t))+
     geom_line(aes(y=X15),color='red')+    
     theme_minimal()
 
-# fit3 <- load_model('models/CTSM/model3.RData')
 
+fit3 <- load_model('models/CTSM/model9d.RData')
 states<-c('X0','X1','X2','X3','X4','X5','X6','X7','X8','X9','X10','X11','X12','X13','X14','X15')
 data <- make_data(start = '2015-04-01', end = '2016-05-01', splines = 7)
 obs<-data[,states]
-
-
 n.ahead<-24
 initial <- as.numeric(obs[1,])
-names(initial) <- names(fit1$xm[1:16])
-
+names(initial) <- names(fit3$xm[1:16])
 sim <- simulate(fit3, newdata = data, firstorderinputinterpolation=TRUE, x0 = initial)
-p3 <- predict(fit3, newdata = data, firstorderinputinterpolation=TRUE, n.ahead=n.ahead, x0 = initial)$output
-p3p <- as.data.frame(p3$pred)
-p3s <- as.data.frame(p3$sd)
-
-write.csv(p3p, 'p3.csv')
-write.csv(p3s, 'p3s.csv')
 write.csv(as.data.frame(sim$output$sim), 'sim.csv')
 write.csv(data, 'data.csv')
 
-
+summary(fit3)
 interval <- 300:500
 ggplot(data = p3[interval,], aes(x=interval))+
     geom_line(aes(y = X0), size = 1, color = 'green') + 
@@ -237,4 +228,9 @@ summary(fit3)
 fit3$loglik
 
 
+f <- fit3$xm[c('f0', 'f1','f2','f3','f4','f5','f6','f7','f8','f9','f10','f11','f12','f13','f14','f15')]
+h <- fit3$xm[c('h0', 'h1','h2','h3','h4','h5','h6','h7','h8','h9','h10','h11','h12','h13','h14')]
+
+plot(f, col = 'blue', type = 'b')
+# lines(h, col = 'red', type = 'b')
 

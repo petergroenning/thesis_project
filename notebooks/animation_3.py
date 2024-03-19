@@ -22,32 +22,44 @@ def get_time(idx):
 def get_sim(idx):
     return sim.iloc[idx, 1:].values
 
+def getControl(idx):
+    return true.loc[idx,['Fbot','Fmid','Ftop']]
 
-
-fig, ax = plt.subplots(1,1,figsize = (10, 6))
+fig, ax = plt.subplots(2,1,figsize = (10, 6))
 def animate(i):
     p = get_pred(i)
     # pw = get_predw(i)
     s = get_sim(i)
     # s, sw = get_sd(i)
-    ax.clear()
-    ax.set_xlim(-0.5, 16.5)
-    ax.grid(True, linestyle='--', alpha=0.5)
-    ax.set_xlabel('Depth (m)')
-    ax.set_ylabel('Temperature (C)')
-    ax.set_title(f'Water temperature at different depths {get_time(i)}')
-    ax.plot(d, get_true(i), label='True', marker = 'o')
-    ax.plot(d, p, label='Predicted (24h)', marker = 'o')
+    ax[0].clear()
+    ax[0].set_xlim(-0.5, 16.5)
+    ax[0].set_ylim(10, 90)
+    
+    ax[0].grid(True, linestyle='--', alpha=0.5)
+    ax[0].set_xlabel('Depth (m)')
+    ax[0].set_ylabel('Temperature (C)')
+    
+    ax[0].set_title(f'Water temperature at different depths {get_time(i)}')
+    ax[0].plot(d, get_true(i), label='True', marker = 'o')
+    # ax[0].plot(d, p, label='Predicted (24h)', marker = 'o')
     # ax.plot(d, pw, label='Predicted (1w)', marker = 'o')
-    ax.plot(d, s, label='Simulated', marker = 'o')
-    ax.legend()
+    ax[0].plot(d, s, label='Simulated', marker = 'o')
+    ax[0].legend()
+
+    c = getControl(i)
+    
+    ax[1].clear()
+    ax[1].set_ylim(-250,250)
+    ax[1].bar(['Fbot','Fmid','Ftop'], c)
+    ax[1].vlines(['Fbot','Fmid','Ftop'], -200, 200, linestyle='--', alpha=0.5)
+    ax[1].hlines(0, -0.5, 2.5, linestyle='--', alpha=0.5)
 
 
 
-# print(simw)
-print(sim)
+# # print(simw)
+# print(sim)
 ani = FuncAnimation(fig, animate, frames=len(sim), interval=1, repeat=True, )
 
-    # ani.save('model.gif', writer='Pillow', fps=40)
+#     # ani.save('model.gif', writer='Pillow', fps=40)
 plt.show()
-# print(true)
+# # print(true)
