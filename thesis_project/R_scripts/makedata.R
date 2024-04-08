@@ -1,25 +1,35 @@
 library(splines)
-make_data<-function(start = '2015-08-01', end = '2015-08-31', splines = 5){
+make_data<-function(start = '2015-08-01', end = '2015-08-31', fill = c()){
     water_sensors <- read.csv('data/processed/dronninglund/water_sensors.csv')
     inputs  <- read.csv('data/processed/dronninglund/inputs.csv') 
     vars<-read.csv('data/processed/dronninglund/variables.csv')
     ambientTemp<-vars$temp_dry
 
+    inputs <- cbind(inputs,ambientTemp)
+    idx <- complete.cases(inputs)
+    
+    data <- cbind(water_sensors[idx,],inputs[idx,])
+    # data <- cbind(water_sensors, inputs)
+    data$dFtopIn <- c(0,diff(data$FtopIn))
+    data$dTtop <- c(0,diff(data$Ttop))
+    data$dTbot <- c(0,diff(data$Tbot))
+    data$dFbotIn <- c(0,diff(data$FbotIn))
+    data$dFbotOut <- c(0,diff(data$FbotOut))
 
-    data <- cbind(water_sensors, inputs,ambientTemp)
+    data$FbotInk1 <- c(0,data$FbotIn[1:(nrow(data)-1)])
+    data$Tbotk1 <- c(0,data$Tbot[1:(nrow(data)-1)])
+
+
+
+
     data <- data[, !duplicated(colnames(data))]
     # dropna
-    data <- data[complete.cases(data),]
+    # data <- data[complete.cases(data),]
+    data <- tidyr::fill(data, fill, .direction = "downup")
+
     data <- data[which(data$X >= start & data$X <= end),]
+    
 
-
-    if (splines)
-        bs<-bs(1:16,df=splines,intercept = TRUE)
-        for (i in 1:splines){
-            for (j in 0:15){
-                data[,paste0('b',i,'x',j)]<-bs[(j+1),i]
-            }
-        }
 
     return(data.frame(data))
 }
