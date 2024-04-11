@@ -65,8 +65,8 @@ make_model<-function(model, type = 'linear'){
         model$addSystem(dx1m~dt*(Y-x1m)+sigma_x*dw1)
 
     } else if (type == 'nonlinear1_lag3'){
-        model$addSystem(dY~dt/V1*((x1m-X0)*(k1+f1*FbotIn)+(x1m-X2)*(k1+f1*FbotOut)-(X2-x1m)*(x1m-X0)*Fbot*v)+sigma_y*dwY)
-        model$addSystem(dx1m~dt*(Y+((x1m-X0)*(k1+f1*FbotIn)+(x1m-X2)*(k1+f1*FbotOut)-(X2-x1m)*(x1m-X0)*Fbot*v)/V1-x1m)+sigma_x*dw1)
+        model$addSystem(dY~dt/V1*((x1m-X0)*(k1-f1*FbotIn)+(x1m-X2)*(k1-f1*FbotOut)-(X2-x1m)*(x1m-X0)*Fbot*v)+sigma_y*dwY)
+        model$addSystem(dx1m~dt*(Y+((x1m-X0)*(k1-f1*FbotIn)+(x1m-X2)*(k1-f1*FbotOut)-(X2-x1m)*(x1m-X0)*Fbot*v)/V1-x1m)+sigma_x*dw1)
 
     } else if (type == 'nonlinear1_lag4'){
         model$addSystem(dY~dt/V1*((x1m-X0)*(k1+f1*FbotIn)+(x1m-X2)*(k1+f1*FbotOut)-(X2-x1m)*(x1m-X0)*Fbot*v)+sigma_y*dwY)
@@ -75,11 +75,23 @@ make_model<-function(model, type = 'linear'){
     } else if (type == 'nonlinear1_lag5'){
         model$addSystem(dY~dt/V1*((x1m-X0)*(k1+f1*FbotIn)+(x1m-X2)*(k1+f1*FbotOut)-(X2-x1m)*(x1m-X0)*Fbot*v)+sigma_y*dwY)
         model$addSystem(dx1m~dt*(Y+((x1m-X0)*(k1+f1*FbotIn)+(x1m-X2)*(k1+f1*FbotOut)-(X2-x1m)*(x1m-X0)*Fbot*v)/V1-u*x1m)+sigma_x*dw1)
-    } else if (type == 'nonlinear1_lag6'){
-        model$addSystem(dY~dt/V1*((x1m-X0)*(k1+f1*FbotIn)+(x1m-X2)*(k1+f1*FbotOut)-(X2-x1m)*(x1m-X0)*Fbot*v)+sigma_y*dwY)
-        model$addSystem(dx1m~dt*(Y*a+((x1m-X0)*(k1+f1*FbotIn)+(x1m-X2)*(k1+f1*FbotOut)-(X2-x1m)*(x1m-X0)*Fbot*v)/V1-x1m)+sigma_x*dw1)
-    }
 
+    # } 
+    # else if (type == 'model2'){
+    #     model$addSystem(dY1m~dt/V1*((x1m-X0)*(k1-f1*FbotIn)+(x1m-X2)*(k1-f1*FbotOut)-(X2-x1m)*(x1m-X0)*Fbot*v)+sigma_y*dwY)
+    #     model$addSystem(dx1m~dt*(Y1m-x1m+((x1m-X0)*(k1-f1*FbotIn)+(x1m-X2)*(k1-f1*FbotOut)-(X2-x1m)*(x1m-X0)*Fbot*v)/V1)+sigma_x*dw1)
+
+    } else if (type == 'model'){
+        model$addSystem(dY1m~dt/V1*((x1m-X0)*(k-f*FbotIn)+(x1m-X2)*(k-f*FbotOut)-(X2-x1m)*(x1m-X0)*Fbot*v)+sigma_y*dwY)
+        model$addSystem(dx1m~dt*((Y1m-x1m)*a+((x1m-X0)*(k-f*FbotIn)+(x1m-X2)*(k-f*FbotOut)-(X2-x1m)*(x1m-X0)*Fbot*v)/V1)+sigma_x*dw1)
+
+    }else if (type == 'model1'){
+        model$addSystem(dY1m~dt*(((x1m-X0)*(k1-f1*(FbotIn))+(x1m-X2)*(k2-f2*(FbotOut)))/V1)+sigma_y*dwY)
+        model$addSystem(dx1m~dt*(((x1m-X0)*(k1-f1*(FbotIn))+(x1m-X2)*(k2-f2*(FbotOut)))/V1+(Y1m-x1m)*a)+(sigma_x)*dw1)
+    }else if (type == 'model2'){
+        model$addSystem(dY1m~dt*(x1m-Y1m)*b+sigma_y*dwY)
+        model$addSystem(dx1m~dt*((Y1m-x1m)*a+((x1m-X0)*(k1-f1*(FbotIn))+(x1m-X2)*(k2-f2*(FbotOut)))/V1)+(sigma_x)*dw1)
+    }
 
 
 
@@ -91,14 +103,13 @@ make_model<-function(model, type = 'linear'){
 
     # Hidden State
     model$setParameter(sigma_y = c(init=1e-2,lb=0,ub=1))
-    model$setParameter(Y = c(init=10,lb=5,ub=40))
-
+    model$setParameter(Y1m = c(init = 8,lb = 0, ub = 40))
     # Parameters
-    model$setParameter(k1 = c(init=1,lb=0,ub=50))
-    model$setParameter(k2 = c(init=2,lb=-50,ub=50))
-    model$setParameter(f1 = c(init=5e-1,lb=-2,ub=10))
-    model$setParameter(f2 = c(init=5e-1,lb=-2,ub=10))
-    model$setParameter(v = c(init=1e-4,lb=0,ub=1))
-    model$setParameter(u = c(init=1,lb=0,ub=2))
-    model$setParameter(a = c(init=1,lb=0,ub=2))
+    model$setParameter(k1 = c(init=1,lb=-10,ub=100))
+    model$setParameter(f1 = c(init=5e-1,lb=-10,ub=100))
+    model$setParameter(k2 = c(init=1,lb=-10,ub=100))
+    model$setParameter(f2 = c(init=5e-1,lb=-10,ub=100))
+    model$setParameter(a = c(init=1,lb=-4,ub=4))
+    model$setParameter(b = c(init=1,lb=-4,ub=4))
+
     return(model)}

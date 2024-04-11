@@ -1,7 +1,8 @@
 ## The negative loglikelihood
 nllikelihood <- function(xm, fit, D, firstorder=TRUE, c=3, n.ahead=1, printit=TRUE){
-  if(printit){ print(format(xm,digits=2)) }
-  fit$xm <- xm
+  if(printit){ print(format(xm,digits=6))}
+
+  fit$xm[names(xm)] <- xm
   ## loglikelihood initialization
   nll <- 0
   ## use predict to compute the likelihood using the parameters in xm.
@@ -17,8 +18,10 @@ nllikelihood <- function(xm, fit, D, firstorder=TRUE, c=3, n.ahead=1, printit=TR
     ## c is hubers psi. when the normalized residual is larger than c or smaller than
     ## minus c, the loglikelihood continues as a square root (for robustness)
     ressq <- (y-yhat)^2 / sd^2
+    ressq <- ressq[!is.na(ressq)] # DROP NA
+
     ressq[ressq>c^2] <- c*(2*sqrt(ressq[ressq>c^2])-c)
-    nll <- nll + 0.5*( sum(log(Pred$output$sd^2)+ressq)  )
+    nll <- nll + 0.5*(sum(log(Pred$output$sd^2)+ressq))
   }
   l <- ncol(out_pred) ## dimension of output vector
   N <- nrow(out_pred) ## number of observations

@@ -37,8 +37,8 @@ make_model<-function(model, type = 'linear'){
         model$addSystem(dY~dt/V15*((Ttop-x15m)*(v1+v2*(X14-x15m))*FtopIn+(X14-x15m)*(k1+FtopOut*f1+f2*Ftop*(x15m-X14))+(ambientTemp-x15m)*u)+sigma_y*dwY)
         model$addSystem(dx15m~dt*(Y-x15m+((Ttop-x15m)*(v1+v2*(X14-x15m))*FtopIn+(X14-x15m)*(k1+FtopOut*f1+f2*Ftop*(x15m-X14))+(ambientTemp-x15m)*u)/V15)+sigma_x*dw15)
     } else if (type == 'model'){
-        model$addSystem(dY~dt/V15*((Ttop-x15m)*(v1+v2*(X14-x15m))*FtopIn+(X14-x15m)*(k1+FtopOut*f1+f2*Ftop*(x15m-X14))+(ambientTemp-x15m)*u)+(sigma_y+Gy*sqrt(FtopVol))*dwY)
-        model$addSystem(dx15m~dt*(Y-x15m+((Ttop-x15m)*(v1+v2*(X14-x15m))*FtopIn+(X14-x15m)*(k1+FtopOut*f1+f2*Ftop*(x15m-X14))+(ambientTemp-x15m)*u)/V15)+(sigma_x+Gx*sqrt(FtopVol))*dw15)
+        model$addSystem(dY15m~dt/V15*((Ttop-x15m)*(v1+v2*(x15m-X14))*FtopIn+(X14-x15m)*(k+f*FtopOut)+(ambientTemp-x15m)*u)+sigma_y*dwY)
+        model$addSystem(dx15m~dt*((Y15m-x15m)*a+((Ttop-x15m)*(v1+v2*(x15m-X14))*FtopIn+(X14-x15m)*(k+f*FtopOut)+(ambientTemp-x15m)*u)/V15)+sigma_x*dw15)
 
     }
     
@@ -57,16 +57,14 @@ make_model<-function(model, type = 'linear'){
     model$setParameter(sigma_y = c(init=1e-2,lb=0,ub=1))
     model$setParameter(Y = c(init=10,lb=5,ub=40))
     # Parameters
-    model$setParameter(k1 = c(init=-20,lb=-50,ub=30))
-    model$setParameter(k2 = c(init=-20,lb=-50,ub=30))
-    model$setParameter(f1 = c(init=0,lb=-30,ub=10))
-    model$setParameter(f2 = c(init=0,lb=-1,ub=1))
-    model$setParameter(f3 = c(init=0,lb=-1,ub=1))
+    model$setParameter(k = c(init=10,lb=0,ub=50))
+    model$setParameter(f = c(init=1,lb=0,ub=10))
+    model$setParameter(v = c(init=1e-4,lb=0,ub=1))
+    model$setParameter(a = c(init=1,lb=0,ub=2))
 
     model$setParameter(v1 = c(init=0,lb=-4,ub=5))
     model$setParameter(v2 = c(init=0,lb=-4,ub=5))
-    model$setParameter(u = c(init=1e-7,lb=0,ub=5))
-    model$setParameter(Gy = c(init=1e-2,lb=0,ub=1))
-    model$setParameter(Gx = c(init=1e-2,lb=0,ub=1))
+    model$setParameter(u = c(init=1,lb=0,ub=5))
+  
 
     return(model)}

@@ -12,6 +12,9 @@ PROJECT_NAME = thesis_project
 PYTHON_VERSION = 3.11
 R_VERSION = 4.3.2
 PYTHON_INTERPRETER = python3
+REMOTE_USER = s183922
+REMOTE_HOST = login1.hpc.dtu.dk
+REMOTE_PATH = /work3/s183922/thesis_project/data
 
 #################################################################################
 # COMMANDS                                                                      #
@@ -52,6 +55,13 @@ clean:
 data:
 	python $(PROJECT_NAME)/data/make_dataset.py
 
+## Move data to ssh
+move_data:
+	scp -r data/ $(REMOTE_USER)@$(REMOTE_HOST):$(REMOTE_PATH)
+
+move_models:
+	scp -r models/ $(REMOTE_USER)@$(REMOTE_HOST):$(REMOTE_PATH)
+
 #################################################################################
 # Documentation RULES                                                           #
 #################################################################################
@@ -67,6 +77,8 @@ serve_documentation: dev_requirements
 #################################################################################
 # Self Documenting Commands                                                     #
 #################################################################################
+
+
 
 .DEFAULT_GOAL := help
 
