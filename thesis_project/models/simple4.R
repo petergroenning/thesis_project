@@ -82,17 +82,29 @@ make_model<-function(model, type = 'linear'){
     } else if (type == 'model'){
         model$addSystem(dY4m~dt/V4*((x4m-X3)*(k-f*FbotIn)+(x4m-X5)*(k-f*FbotOut)-(X5-x4m)*(x4m-X3)*Fbot*v)+sigma_y*dwY)
         model$addSystem(dx4m~dt*((Y4m-x4m)*a+((x4m-X3)*(k-f*FbotIn)+(x4m-X5)*(k-f*FbotOut)-(X5-x4m)*(x4m-X3)*Fbot*v)/V4)+sigma_x*dw1)
+    }else if (type == 'model1'){
+        model$addSystem(dY4m~dt*(((x4m-X3)*(k3-f3*(FbotIn))+(x4m-X5)*(k4-f4*(FbotOut)))/V4)+sigma_y*dwY)
+        model$addSystem(dx4m~dt*(((x4m-X3)*(k1-f1*(FbotIn))+(x4m-X5)*(k2-f2*(FbotOut)))/V4+(Y4m-x4m)*a)+(sigma_x)*dw1)
     }else if (type == 'model2'){
         model$addSystem(dY4m~dt*(x4m-Y4m)+sigma_y*dwY)
         model$addSystem(dx4m~dt*((Y4m-x4m)*a+((x4m-X3)*(k1-f1*(FbotIn))+(x4m-X5)*(k2-f2*(FbotOut)))/V4)+(sigma_x)*dw1)
-    }else if (type == 'modelc'){
-        model$addSystem(dY4m~dt/V4*((x4m-X3)*(k3-f3*FbotIn)+(x4m-X5)*(k4-f4*FbotOut))+sigma_y*dwY)
-        model$addSystem(dx4m~dt*((Y4m-x4m)*a+((x4m-X3)*(k1-f1*FbotIn)+(x4m-X5)*(k2-f2*FbotOut))/V4)+sigma_x*dw1)
-
     }else if (type == 'model3'){
-        model$addSystem(dY4m~dt*(x4m-Y4m)+sigma_y*dwY)
-        model$addSystem(dx4m~dt*((Y4m-x4m)*a+((x4m-X3)*(k1-f1*(FbotIn))+(x4m-X5)*(k2-f2*(FbotOut)-(X5-x4m)*(x4m-X3)*Fbot*v))/V4)+(sigma_x)*dw1)
+        model$addSystem(dY4m~dt*(x4m-Y4m)*b+sigma_y*dwY)
+        model$addSystem(dx4m~dt*((Y4m-x4m)*a+((X3-x4m)*(k1+f1*(FbotIn))+(X5-x4m)*(k2+f2*(FbotOut)))/V4)+(sigma_x)*dw1)
+    }else if (type == 'model4'){
+        model$addSystem(dY4m~dt*(x4m-Y4m)*b+sigma_y*dwY)
+        model$addSystem(dx4m~dt*((Y4m-x4m)*a+((X3-x4m)*(f1*(FbotIn))+(X5-x4m)*(f2*(FbotOut)))/V4)+(sigma_x)*dw1)
     }
+    
+    # Parameters
+    # model$setParameter(Y4m = c(init=8,lb=0,ub=40))
+    model$setParameter(k1 = c(init=1,lb=-50,ub=50))
+    model$setParameter(k2 = c(init=1,lb=-50,ub=50))
+    model$setParameter(f2 = c(init=5e-1,lb=0,ub=50))
+    model$setParameter(f1 = c(init=5e-1,lb=0,ub=50))
+
+    model$setParameter(a = c(init=1,lb=0,ub=10))
+    model$setParameter(b = c(init=1e-4,lb=0,ub=10))
 
     # Add Inputs
     model$addInput("X3","X5")
@@ -102,27 +114,6 @@ make_model<-function(model, type = 'linear'){
 
     # Hidden State
     model$setParameter(sigma_y = c(init=1e-2,lb=0,ub=1))
-    model$setParameter(Y4m = c(init=10,lb=5,ub=40))
 
-    # model$setParameter(k = c(init=1,lb=0,ub=50))
-    # model$setParameter(f = c(init=5e-1,lb=0,ub=10))
-    model$setParameter(v = c(init=1e-4,lb=0,ub=1))
-    # model$setParameter(a = c(init=0.5,lb=0,ub=2))
 
-    model$setParameter(k1 = c(init=1,lb=-50,ub=50))
-    model$setParameter(f1 = c(init=5e-1,lb=-10,ub=200))
-    model$setParameter(k2 = c(init=1,lb=-50,ub=50))
-    model$setParameter(f2 = c(init=5e-1,lb=-10,ub=200))
-    model$setParameter(k3 = c(init=1,lb=-50,ub=50))
-    model$setParameter(f3 = c(init=5e-1,lb=-10,ub=20))
-    model$setParameter(k4 = c(init=1,lb=-50,ub=50))
-    model$setParameter(f4 = c(init=5e-1,lb=-10,ub=20))
-    model$setParameter(a = c(init=1,lb=-4,ub=100))
-    model$setParameter(b = c(init=1,lb=-4,ub=10))
-    # model$setParameter(k1 = c(init=1,lb=-10,ub=50))
-    # model$setParameter(k2 = c(init=1,lb=-10,ub=50))
-    # model$setParameter(f1 = c(init=5e-1,lb=-10,ub=20))
-    # model$setParameter(f2 = c(init=5e-1,lb=-10,ub=20))
-    # model$setParameter(a = c(init=1,lb=-4,ub=4))
-    # model$setParameter(b = c(init=1,lb=-4,ub=4))
     return(model)}

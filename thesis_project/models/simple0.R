@@ -44,6 +44,12 @@ make_model<-function(model, type = 'linear'){
     } else if (type == 'model2'){
         model$addSystem(dY0m~dt*(x0m-Y0m)*b+sigma_y*dw0)
         model$addSystem(dx0m~dt*((Y0m-x0m)*a+((Tbot-x0m)*v*(FbotIn)+(x0m-X1)*(k1-f1*(FbotOut)))/V0)+sigma_x*dw1)  
+    }else if (type == 'model3'){
+        model$addSystem(dY0m~dt*(x0m-Y0m)*b+sigma_y*dw0)
+        model$addSystem(dx0m~dt*((Y0m-x0m)*a+((Tbot-x0m)*(v)*(FbotIn)+(X1-x0m)*(k1+f1*(FbotOut)))/V0)+sigma_x*dw1)  
+    }else if (type == 'model4'){
+        model$addSystem(dY0m~dt*(x0m-Y0m)*b+sigma_y*dw0)
+        model$addSystem(dx0m~dt*((Y0m-x0m)*a+((Tbot-x0m)*(v)*(FbotIn)+(X1-x0m)*(f1*(FbotOut)))/V0)+sigma_x*dw1)  
     }
   
     
@@ -68,11 +74,11 @@ make_model<-function(model, type = 'linear'){
     # Hidden State
     model$setParameter(sigma_y = c(init=1e-2,lb=0,ub=1))
 
-    model$setParameter(k1 = c(init=1,lb=-10,ub=100))
-    model$setParameter(f1 = c(init=5e-1,lb=-10,ub=100))
-    model$setParameter(v = c(init=1,lb=-10,ub=100))
-    model$setParameter(a = c(init=1,lb=-4,ub=4))
-    model$setParameter(b= c(init=1,lb=-4,ub=4))
+    model$setParameter(k1 = c(init=1,lb=-100,ub=100))
+    model$setParameter(f1 = c(init=5e-1,lb=0,ub=100))
+    model$setParameter(v = c(init=1,lb=0,ub=100))
+    model$setParameter(a = c(init=1,lb=0,ub=4))
+    model$setParameter(b= c(init=1,lb=0,ub=4))
 
     # Parameters
     # model$setParameter(k = c(init=1,lb=0,ub=50))

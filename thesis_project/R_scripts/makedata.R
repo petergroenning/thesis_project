@@ -20,7 +20,8 @@ make_data<-function(start = '2015-08-01', end = '2015-08-31', fill = c()){
     data$Tbotk1 <- c(0,data$Tbot[1:(nrow(data)-1)])
 
     data$FbotOutk1 <- c(0,data$FbotOut[1:(nrow(data)-1)])
-
+    data$FtopInk1 <- c(0,data$FtopIn[1:(nrow(data)-1)])
+    data$FtopInk2 <- c(0,data$FtopIn[1:(nrow(data)-1)])
 
 
     data <- data[, !duplicated(colnames(data))]

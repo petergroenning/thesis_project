@@ -10,7 +10,7 @@ source('thesis_project/R_scripts/nllikelihood.R')
 # layer <- 1
 # model_types <- c('linear_lag2', 'linear_lag3', 'linear1_lag1', 'linear1_lag2', 'linear1_lag3', 'nonlinear_lag1', 'nonlinear_lag2', 'nonlinear_lag3', 'nonlinear1_lag1', 'nonlinear1_lag2', 'nonlinear1_lag3')
 
-fit_model <- function(layer, model_type){
+fit_model <- function(layer, model_type, fill_state = TRUE){
     source('thesis_project/models/base_model.R')
 
     model_name <- paste0('simple', layer)
@@ -22,36 +22,42 @@ fit_model <- function(layer, model_type){
     } else {
         inputs <- paste0('X', layer-1)
     }
-    # inputs <- c(paste0('X', layer-1), paste0('X', layer+1))
 
-    inputs <- c(inputs,paste0('X',layer))
+
+
+
     print(inputs)
     source(paste0('thesis_project/models/', model_name, '.R'))
     model <- make_model(model, type = model_type)
 
-    model$ParameterValues
-    # Data
+    if (fill_state){
+           inputs <- c(inputs,paste0('X',layer))
+    } else{
+        model_type <- paste0(model_type, 'missing_obs')
+    }    # Data
     data <- make_data(start = '2017-02-01', end = '2017-12-01', fill=inputs)
     model <- setInitialState(model, data)
 
     # model$options$solutionMethod <- 0
     model$options$eps <- 1e-6
     # model$options$nIEKF <- 1
-    model <- setInitialState(model, data)
 
     fit <- makefit(model)
     
-    pars <- fit$xm[2:(length(fit$xm)-1)]
-
+    pars <- fit$xm[c(1,3,4,5,6,7,8,9,10,11)]
+    print(pars)
     nllikelihood(pars, fit, data, firstorder=TRUE, c=3, n.ahead=1, printit=TRUE)
 
-    # res <- nlminb(start = pars, objective = nllikelihood, fit = fit, D = data, firstorder = TRUE, c = 3, n.ahead = 1, printit = TRUE, lower = 0, upper = 100)
+    # res <- nlminb(start = pars, objective = nllikelihood, fit = fit, D = data, firstorder = TRUE, c = 3, n.ahead = 1, printit = FALSE, lower = 0, upper = 100)
     fit <- model$estimate(data = data, firstorder = TRUE)
-    # fit$xm[3:(length(fit$xm)-1)] <- res$par
-
+    # fit$xm[2:(length(fit$xm)-1)] <- res$par
+    # fit$data <- data
     model_path <- paste0('models/', model_name, '/')
     dir.create(model_path, showWarnings = FALSE)
-    save(fit, file = paste0('models/', model_name, '/', model_type, '.RData'))
+
+    
+
+    save(fit, file = paste0('models/', model_name, '/', model_type,  '.RData'))
 
 
     ## EVALUATION ##
@@ -87,8 +93,9 @@ fit_model <- function(layer, model_type){
 
 
 
-layers <- 4
-model_types <- c('model3')
+
+layers <- 0:15
+model_types <- c('model3','model4')
 for (layer in layers){
     print(layer)
     for (model_type in model_types){

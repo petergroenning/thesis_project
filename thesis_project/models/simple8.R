@@ -81,8 +81,32 @@ make_model<-function(model, type = 'linear'){
 
     } else if (type == 'model'){
         model$addSystem(dY8m~dt/V8*((x8m-X7)*(k-f*FbotIn)+(x8m-X9)*(k-f*FbotOut)-(X9-x8m)*(x8m-X7)*Fbot*v)+sigma_y*dwY)
-        model$addSystem(dx8m~dt*((Y8m-x8m)*a+((x8m-X7)*(k-f*FbotIn)+(x8m-X9)*(k-f*FbotOut)-(X9-x8m)*(x8m-X7)*Fbot*v)/V8)+sigma_x*dw1) }
+        model$addSystem(dx8m~dt*((Y8m-x8m)*a+((x8m-X7)*(k-f*FbotIn)+(x8m-X9)*(k-f*FbotOut)-(X9-x8m)*(x8m-X7)*Fbot*v)/V8)+sigma_x*dw1)
 
+    }else if (type == 'model1'){
+        model$addSystem(dY8m~dt*(((x8m-X7)*(k3-f3*(FbotIn))+(x8m-X9)*(k4-f4*(FbotOut)))/V8)+sigma_y*dwY)
+        model$addSystem(dx8m~dt*(((x8m-X7)*(k1-f1*(FbotIn))+(x8m-X9)*(k2-f2*(FbotOut)))/V8+(Y8m-x8m)*a)+(sigma_x)*dw1)
+    }else if (type == 'model2'){
+        model$addSystem(dY8m~dt*(x8m-Y8m)+sigma_y*dwY)
+        model$addSystem(dx8m~dt*((Y8m-x8m)*a+((x8m-X7)*(k1-f1*(FbotIn))+(x8m-X9)*(k2-f2*(FbotOut)))/V8)+(sigma_x)*dw1)
+    }else if (type == 'model3'){
+        model$addSystem(dY8m~dt*(x8m-Y8m)*b+sigma_y*dwY)
+        model$addSystem(dx8m~dt*((Y8m-x8m)*a+((X7-x8m)*(k1+f1*(FbotIn))+(X9-x8m)*(k2+f2*(FbotOut)))/V8)+(sigma_x)*dw1)
+    }else if (type == 'model4'){
+        model$addSystem(dY8m~dt*((x8m-Y8m)*b)+sigma_y*dwY)
+        model$addSystem(dx8m~dt*((Y8m-x8m)*a+((X7-x8m)*(f1*(FbotIn))+(X9-x8m)*(f2*(FbotOut)))/V8)+(sigma_x)*dw1)
+    }
+    
+    # Parameters
+    # model$setParameter(Y8m = c(init=8,lb=0,ub=200))
+    model$setParameter(k1 = c(init=1,lb=-50,ub=50))
+    model$setParameter(k2 = c(init=1,lb=-50,ub=50))
+    model$setParameter(f2 = c(init=5e-1,lb=0,ub=50))
+    model$setParameter(f1 = c(init=5e-1,lb=0,ub=50))
+
+    model$setParameter(a = c(init=1,lb=0,ub=10))
+    model$setParameter(b = c(init=1e-4,lb=0,ub=10))
+    model$setParameter(u = c(init=1e-6,lb=0,ub=40))
     # Add Inputs
     model$addInput("X7","X9")
 
@@ -91,11 +115,6 @@ make_model<-function(model, type = 'linear'){
 
     # Hidden State
     model$setParameter(sigma_y = c(init=1e-2,lb=0,ub=1))
-    model$setParameter(Y = c(init=10,lb=5,ub=40))
 
-    # Parameters
-    model$setParameter(k = c(init=1,lb=0,ub=50))
-    model$setParameter(f = c(init=5e-1,lb=0,ub=10))
-    model$setParameter(v = c(init=1e-4,lb=0,ub=1))
-    model$setParameter(a = c(init=0.5,lb=0,ub=2))
+
     return(model)}

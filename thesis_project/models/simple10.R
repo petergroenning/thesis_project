@@ -82,6 +82,12 @@ make_model<-function(model, type = 'linear'){
     } else if (type == 'model'){
         model$addSystem(dY10m~dt/V10*((x10m-X9)*(k-f*(FbotIn+FmidOut))+(x10m-X11)*(k-f*(FbotOut+FmidIn))-(X11-x10m)*(x10m-X9)*Fbot*v+(Tmid-x10m)*FmidIn*fmid)+sigma_y*dwY)
         model$addSystem(dx10m~dt*((Y10m-x10m)*a+((x10m-X9)*(k-f*(FbotIn+FmidOut))+(x10m-X11)*(k-f*(FbotOut+FmidIn))-(X11-x10m)*(x10m-X9)*Fbot*v+(Tmid-x10m)*FmidIn*fmid)/V10)+sigma_x*dw1)
+    } else if (type == 'model3'){
+        model$addSystem(dY10m~dt*(x10m-Y10m)*b+sigma_y*dwY)
+        model$addSystem(dx10m~dt*((Y10m-x10m)*a+((X9-x10m)*(k1+f1*(FbotIn))+(X11-x10m)*(k2+f2*(FbotOut))+(Tmid-x10m)*fmid*FmidIn)/V9)+(sigma_x)*dw1)
+    }else if (type == 'model4'){
+        model$addSystem(dY10m~dt*(x10m-Y10m)*b+sigma_y*dwY)
+        model$addSystem(dx10m~dt*((Y10m-x10m)*a+((X9-x10m)*(f1*(FbotIn))+(X11-x10m)*(f2*(FbotOut))+(Tmid-x10m)*fmid*FmidIn)/V9)+(sigma_x)*dw1)
     }
 
     # Add Inputs
@@ -92,12 +98,13 @@ make_model<-function(model, type = 'linear'){
 
     # Hidden State
     model$setParameter(sigma_y = c(init=1e-2,lb=0,ub=1))
-    model$setParameter(Y = c(init=10,lb=5,ub=40))
-    # Parameters
-    model$setParameter(k = c(init=1,lb=0,ub=50))
-    model$setParameter(f = c(init=5e-1,lb=0,ub=10))
-    model$setParameter(v = c(init=1e-4,lb=0,ub=1))
-    model$setParameter(a = c(init=0.5,lb=0,ub=2))
+    model$setParameter(k1 = c(init=1,lb=-50,ub=50))
+    model$setParameter(k2 = c(init=1,lb=-50,ub=50))
+    model$setParameter(f2 = c(init=5e-1,lb=0,ub=50))
+    model$setParameter(f1 = c(init=5e-1,lb=0,ub=50))
+
+    model$setParameter(a = c(init=1,lb=0,ub=10))
+    model$setParameter(b = c(init=1e-4,lb=0,ub=10))
 
     model$setParameter(fmid=c(init=1,lb=0,ub=10))
 

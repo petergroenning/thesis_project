@@ -18,8 +18,8 @@ load_model <- function(model_name){
 }
 
 
-layer <- 4
-types <- c('model2','modelc','model3')
+layer <- 8
+types <- c('model4')
 model_name <- paste0('simple', layer)
 
 fits <- list()
@@ -33,7 +33,7 @@ for (type in types){
     fits[[type]] <- fit
     p <- predict(fit, newdata = fit$data[[1]], firstorderinputinterpolation=TRUE, n.ahead = 1)
     pred <- p$output$pred[,1]
-    state <- p$state$pred[,1]
+    # state <- p$state$pred[,1]
     sd <- p$output$sd[,1]
     r <- pred - fit$data[[1]][paste0('X', layer)]
     preds[[type]] <- pred
@@ -56,11 +56,10 @@ res_interval <- function(interval){
         r <- res[[type]]
         sd <- sds[[type]]
         print(type)
-        plot(preds[[type]][interval], type = 'o')
-        points(true[[type]][interval,], col='red')
         plot(r[interval], main = paste0('Residuals ', type))
         abline(h=0, col='red')
         acf(r[interval], na.action = na.pass, main = paste0('ACF ', type), ylim=c(-0.5,1))
+        pacf(r[interval], na.action = na.pass, main = paste0('PACF ', type), ylim=c(-0.5,1))
         abline(h=0, col='red')
         qqnorm(r[interval]/sd[interval], main = paste0('QQ plot ', type))
         qqline(r[interval]/sd[interval])
@@ -77,11 +76,29 @@ res_interval <- function(interval){
 res_interval(1:7000) 
 # par(mfrow = c(1,1))
 
-# summary(fits$modeld)
-sc <- simulate(fits$model3, newdata = fits$model3$data[[1]][1:7000,], firstorderinputinterpolation=TRUE)$state$sim[1:7000,1]
-# xc <- fits$modelc$data[[1]][1:7000,]$X2
+summary(fits$model3)
+summary(fits$model4)
+
+test_sim <- function(interval = 1:7000){
+    par(mfcol = c(2,length(types)))
+    
+    for (type in types){
+        print(type)
+        s <- simulate(fits[[type]], newdata = fits[[type]]$data[[1]][interval,], firstorderinputinterpolation=TRUE)$state$sim[1:7000,2]
+        x <- fits[[type]]$data[[1]][interval,paste0('X', layer)]
+        plot(s, col = 'red', type = 'l', main = paste0('Simulated ', type))
+        points(x, col = 'blue')
+        plot(s-x, col = 'blue', type = 'o', main = paste0('Simulated ', type))
+        mse <- mean((s-x)^2, na.rm = TRUE)
+        print(paste0('MSE ', type, ': ', mse))
+    }
+}
+
+
+test_sim(1:7000)
+# # xc <- fits$modelc$data[[1]][1:7000,]$X2
 # plot(sc-xc, col = 'blue',ylim = c(-6,10))
-# sb <- simulate(fits$model2, newdata = fits$model2$data[[1]][1:7000,], firstorderinputinterpolation=TRUE)$state$sim[1:7000,1]
+# sb <- simulate(fits$model1, newdata = fits$model1$data[[1]][1:7000,], firstorderinputinterpolation=TRUE)$state$sim[1:7000,1]
 # xb <- fits$model2$data[[1]][1:7000,]$X2
 # points(sb-xb, col = 'red')
 
@@ -142,4 +159,5 @@ sc <- simulate(fits$model3, newdata = fits$model3$data[[1]][1:7000,], firstorder
 # plot(pred[4900:5100], type = 'o')
 # points(state[4900:5100], col = 'blue')
 # lines((pred-r[,1])[4900:5100], col = 'red')
+
 

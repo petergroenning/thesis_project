@@ -83,11 +83,29 @@ make_model<-function(model, type = 'linear'){
         model$addSystem(dY5m~dt/V5*((x5m-X4)*(k-f*FbotIn)+(x5m-X6)*(k-f*FbotOut)-(X6-x5m)*(x5m-X4)*Fbot*v)+sigma_y*dwY)
         model$addSystem(dx5m~dt*((Y5m-x5m)*a+((x5m-X4)*(k-f*FbotIn)+(x5m-X6)*(k-f*FbotOut)-(X6-x5m)*(x5m-X4)*Fbot*v)/V5)+sigma_x*dw1)
 
+    }else if (type == 'model1'){
+        model$addSystem(dY5m~dt*(((x5m-X4)*(k3-f3*(FbotIn))+(x5m-X6)*(k4-f4*(FbotOut)))/V5)+sigma_y*dwY)
+        model$addSystem(dx5m~dt*(((x5m-X4)*(k1-f1*(FbotIn))+(x5m-X6)*(k2-f2*(FbotOut)))/V5+(Y5m-x5m)*a)+(sigma_x)*dw1)
     }else if (type == 'model2'){
-        model$addSystem(dY5m~dt*(x5m-Y5m)*b+sigma_y*dwY)
+        model$addSystem(dY5m~dt*(x5m-Y5m)+sigma_y*dwY)
         model$addSystem(dx5m~dt*((Y5m-x5m)*a+((x5m-X4)*(k1-f1*(FbotIn))+(x5m-X6)*(k2-f2*(FbotOut)))/V5)+(sigma_x)*dw1)
+    }else if (type == 'model3'){
+         model$addSystem(dY5m~dt*(x5m-Y5m)*b+sigma_y*dwY)
+        model$addSystem(dx5m~dt*((Y5m-x5m)*a+((X4-x5m)*(k1+f1*(FbotIn))+(X6-x5m)*(k2+f2*(FbotOut)))/V5)+(sigma_x)*dw1)
+    }else if (type == 'model4'){
+         model$addSystem(dY5m~dt*(x5m-Y5m)*b+sigma_y*dwY)
+        model$addSystem(dx5m~dt*((Y5m-x5m)*a+((X4-x5m)*(f1*(FbotIn))+(X6-x5m)*(f2*(FbotOut)))/V5)+(sigma_x)*dw1)
     }
+    
+    # Parameters
+    # model$setParameter(Y5m = c(init=8,lb=0,ub=40))
+    model$setParameter(k1 = c(init=1,lb=-50,ub=50))
+    model$setParameter(k2 = c(init=1,lb=-50,ub=50))
+    model$setParameter(f2 = c(init=5e-1,lb=0,ub=50))
+    model$setParameter(f1 = c(init=5e-1,lb=0,ub=50))
 
+    model$setParameter(a = c(init=1,lb=0,ub=10))
+    model$setParameter(b = c(init=1e-4,lb=0,ub=10))
     # Add Inputs
     model$addInput("X4","X6")
 
@@ -96,15 +114,5 @@ make_model<-function(model, type = 'linear'){
 
     # Hidden State
     model$setParameter(sigma_y = c(init=1e-2,lb=0,ub=1))
-    # model$setParameter(k = c(init=1,lb=0,ub=50))
-    # model$setParameter(f = c(init=5e-1,lb=0,ub=10))
-    # model$setParameter(v = c(init=1e-4,lb=0,ub=1))
-    # model$setParameter(a = c(init=0.5,lb=0,ub=2))
 
-    model$setParameter(k1 = c(init=1,lb=-10,ub=50))
-    model$setParameter(k2 = c(init=1,lb=-10,ub=50))
-    model$setParameter(f1 = c(init=5e-1,lb=-1,ub=10))
-    model$setParameter(f2 = c(init=5e-1,lb=-1,ub=10))
-    model$setParameter(a = c(init=1,lb=-4,ub=10))
-    model$setParameter(b = c(init=1,lb=-4,ub=10))
     return(model)}

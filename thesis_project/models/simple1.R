@@ -86,11 +86,20 @@ make_model<-function(model, type = 'linear'){
         model$addSystem(dx1m~dt*((Y1m-x1m)*a+((x1m-X0)*(k-f*FbotIn)+(x1m-X2)*(k-f*FbotOut)-(X2-x1m)*(x1m-X0)*Fbot*v)/V1)+sigma_x*dw1)
 
     }else if (type == 'model1'){
-        model$addSystem(dY1m~dt*(((x1m-X0)*(k1-f1*(FbotIn))+(x1m-X2)*(k2-f2*(FbotOut)))/V1)+sigma_y*dwY)
+        model$addSystem(dY1m~dt*(((x1m-X0)*(k3-f3*(FbotIn))+(x1m-X2)*(k4-f4*(FbotOut)))/V1)+sigma_y*dwY)
         model$addSystem(dx1m~dt*(((x1m-X0)*(k1-f1*(FbotIn))+(x1m-X2)*(k2-f2*(FbotOut)))/V1+(Y1m-x1m)*a)+(sigma_x)*dw1)
     }else if (type == 'model2'){
-        model$addSystem(dY1m~dt*(x1m-Y1m)*b+sigma_y*dwY)
+        model$addSystem(dY1m~dt*(x1m-Y1m)+sigma_y*dwY)
         model$addSystem(dx1m~dt*((Y1m-x1m)*a+((x1m-X0)*(k1-f1*(FbotIn))+(x1m-X2)*(k2-f2*(FbotOut)))/V1)+(sigma_x)*dw1)
+    }else if (type == 'model3'){
+        model$addSystem(dY1m~dt*(x1m-Y1m)*b+sigma_y*dwY)
+        model$addSystem(dx1m~dt*((Y1m-x1m)*a+((X0-x1m)*(k1+f1*(FbotIn))+(X2-x1m)*(k2+f2*(FbotOut)))/V1)+(sigma_x)*dw1)
+    }else if (type == 'model4'){
+        model$addSystem(dY1m~dt*(x1m-Y1m)*b+sigma_y*dwY)
+        model$addSystem(dx1m~dt*((Y1m-x1m)*a+((X0-x1m)*(f1*(FbotIn))+(X2-x1m)*(f2*(FbotOut)))/V1)+(sigma_x)*dw1)
+    }else if (type == 'model5'){
+        model$addSystem(dY1m~dt*(x1m-Y1m)*b-dt*u*Y1m+sigma_y*dwY)
+        model$addSystem(dx1m~dt*((Y1m-x1m)*a+((X0-x1m)*(f1*(FbotIn))+(X2-x1m)*(f2*(FbotOut)))/V1)+(sigma_x)*dw1)
     }
 
 
@@ -103,13 +112,14 @@ make_model<-function(model, type = 'linear'){
 
     # Hidden State
     model$setParameter(sigma_y = c(init=1e-2,lb=0,ub=1))
-    model$setParameter(Y1m = c(init = 8,lb = 0, ub = 40))
     # Parameters
-    model$setParameter(k1 = c(init=1,lb=-10,ub=100))
-    model$setParameter(f1 = c(init=5e-1,lb=-10,ub=100))
-    model$setParameter(k2 = c(init=1,lb=-10,ub=100))
-    model$setParameter(f2 = c(init=5e-1,lb=-10,ub=100))
-    model$setParameter(a = c(init=1,lb=-4,ub=4))
-    model$setParameter(b = c(init=1,lb=-4,ub=4))
+    model$setParameter(k1 = c(init=1,lb=-50,ub=50))
+    model$setParameter(k2 = c(init=1,lb=-50,ub=50))
+    model$setParameter(f2 = c(init=5e-1,lb=0,ub=50))
+    model$setParameter(f1 = c(init=5e-1,lb=0,ub=50))
+
+    model$setParameter(a = c(init=1,lb=0,ub=10))
+    model$setParameter(b = c(init=1e-4,lb=0,ub=10))
+    model$setParameter(u = c(init=1e-6,lb=0,ub=40))
 
     return(model)}
