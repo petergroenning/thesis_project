@@ -105,7 +105,7 @@ make_model<-function(model, type = 'linear'){
 
      #SystemNoise
     model$setParameter(sigma_x = c(init=2e-2,lb=1e-30,ub=1))
-
+    model$setParameter(sigma_y = c(init=1e-2,lb=0,ub=1))
     # Hidden State
     model$setParameter(k1 = c(init=1,lb=-50,ub=50))
     model$setParameter(k2 = c(init=1,lb=-50,ub=50))

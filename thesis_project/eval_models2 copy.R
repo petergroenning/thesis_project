@@ -18,16 +18,14 @@ load_model <- function(model_name){
 }
 
 
-model_name <- 'bigbadmodel4'
-path <- paste0('models/', model_name, '.RData')
-fit <- load_model(path)
-
+fit <- load_model('models/coupled/model2.Rdata')
 
 p <- predict(fit, newdata = fit$data[[1]], firstorderinputinterpolation=TRUE, n.ahead = 1)
 pred <- p$output$pred
 state <- p$state$pred
-sd <- p$output$sd
-r <- pred - fit$data[[1]][c("X0", "X1", "X2", "X3" ,"X4" ,"X5", "X6" ,"X7", "X8" ,"X9")]
+sds <- p$output$sd
+res <- pred - fit$data[[1]][c("X0", "X1", "X2",'X3', 'X4', 'X5','X6', 'X7', 'X8', 'X9', 'X10', 'X11', 'X12', 'X13', 'X14', 'X15')]
+
 
 
 # # save residuls and sd
@@ -42,8 +40,8 @@ res_interval <- function(interval, names = c('X1')){
 
     par(mfcol=c(3,length(names)))
     for (name in names){
-        r <- r[,name]
-        sd <- sd[,name]
+        r <- res[,name]
+        sd <- sds[,name]
         print(name)
         plot(r[interval], main = paste0('Residuals ', name))
         abline(h=0, col='red')
@@ -61,8 +59,8 @@ res_interval <- function(interval, names = c('X1')){
     }
   
 }
-res_interval(1000:6000, c('X1')) 
-
+res_interval(1:100, c('X1')) 
+summary(fit)
 
 par(mfrow = c(1,1))
 interval <- 100:150

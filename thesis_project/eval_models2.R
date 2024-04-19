@@ -18,8 +18,10 @@ load_model <- function(model_name){
 }
 
 
-layer <- 8
-types <- c('model4')
+layer <- 15
+types <- c('model3')
+# types <- c('model3','model4')
+
 model_name <- paste0('simple', layer)
 
 fits <- list()
@@ -76,8 +78,9 @@ res_interval <- function(interval){
 res_interval(1:7000) 
 # par(mfrow = c(1,1))
 
-summary(fits$model3)
-summary(fits$model4)
+# summary(fits$model3)
+# summary(fits$model4)
+# summary(fits$model5)
 
 test_sim <- function(interval = 1:7000){
     par(mfcol = c(2,length(types)))
@@ -95,8 +98,8 @@ test_sim <- function(interval = 1:7000){
 }
 
 
-test_sim(1:7000)
-# # xc <- fits$modelc$data[[1]][1:7000,]$X2
+# test_sim(1:7000)
+# xc <- fits$modelc$data[[1]][1:7000,]$X2
 # plot(sc-xc, col = 'blue',ylim = c(-6,10))
 # sb <- simulate(fits$model1, newdata = fits$model1$data[[1]][1:7000,], firstorderinputinterpolation=TRUE)$state$sim[1:7000,1]
 # xb <- fits$model2$data[[1]][1:7000,]$X2
@@ -111,19 +114,23 @@ test_sim(1:7000)
 # x2 <- fits$model2$data[[1]][1:7000,]$X2
 
 # plot(s1-x1, col = 'blue')
-# points(s2-x2, col = 'red')
+# # points(s2-x2, col = 'red')
 
-# points(s1-x, col = 'red')
-# s <- simulate(fits$model, newdata = fits$model$data[[1]][1:7000,])
-# par(mfrow = c(2,1))
-# plot(s1, col = 'blue', type = 'o')
-# # points(fits$model$data[[1]][1:1000,]$X2, col = 'red')
-# plot(s1$state$sim$x1m, col = 'blue', type = 'l')
-# points(fits$model1$data[[1]][1:7000,]$X2, col = 'red')
+# # points(s1-x, col = 'red')
+# # s <- simulate(fits$model, newdata = fits$model$data[[1]][1:7000,])
+# # par(mfrow = c(2,1))
+# # plot(s1, col = 'blue', type = 'o')
+# # # points(fits$model$data[[1]][1:1000,]$X2, col = 'red')
+# # plot(s1$state$sim$x1m, col = 'blue', type = 'l')
+# # points(fits$model1$data[[1]][1:7000,]$X2, col = 'red')
+
+
 # layers <- c(0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15)
-# type <- 'model'
-# f <- c()
-# k <- c()
+# type <- 'model4'
+# f1 <- c()
+# f2 <- c()
+# k1 <- c()
+# a <- c()
 # sx <- c()
 # sy <- c()
 # sX <- c()
@@ -134,15 +141,18 @@ test_sim(1:7000)
 #     fit <- load_model(path)
 #     fits[[type]] <- fit
 #     print(summary(fit))
-#     f <- c(f, unname(fit$xm['f']))
-#     k <- c(k, unname(fit$xm['k']))
-#     v <- c(v, unname(fit$xm['v']))
+#     f1 <- c(f1, unname(fit$xm['f1']))
+#     f2 <- c(f2, unname(fit$xm['f2']))
+#     k1 <- c(k1, unname(fit$xm['k1']))
+#     a <- c(a, unname(fit$xm['a']))
+#     # v <- c(v, unname(fit$xm['v']))
 #     sx <- c(sx, unname(fit$xm['sigma_x']))
 #     sy <- c(sy, unname(fit$xm['sigma_y']))
 #     sX <- c(sX, unname(fit$xm['sigma_X']))
 # }
-
 # par(mfrow=c(1,1))
+# plot(a, type = 'o')
+# # par(mfrow=c(1,1))
 # plot(f, type = 'o')
 # plot(k, type = 'o')
 # plot(v, type = 'o')

@@ -45,7 +45,7 @@ make_model<-function(model, type = 'linear'){
         model$addSystem(dx15m~dt*((Y15m-x15m)*a+((Ttop-x15m)*(v+v1*(x15m-X14))*FtopIn+(X14-x15m)*(k2+f2*FtopOut))/V15)+(sigma_x)*dw1)
     } else if (type == 'model3'){
         model$addSystem(dY15m~dt*(x15m-Y15m)*b+sigma_y*dwY)
-        model$addSystem(dx15m~dt*((Y15m-x15m)*a+((Ttop-x15m)*v*(FtopIn)+(X14-x15m)*(k1+f2*FtopOut))/V15)+(sigma_x)*dw1)
+        model$addSystem(dx15m~dt*((Y15m-x15m)*a+((Ttop-x15m)*v*(FtopIn)+(X14-x15m)*(k1+f2*FtopOut)+(ambientTemp-x15m)*u)/V15)+(sigma_x)*dw1)
     }else if (type == 'model4'){
         model$addSystem(dY15m~dt*(x15m-Y15m)*b+sigma_y*dwY)
         model$addSystem(dx15m~dt*((Y15m-x15m)*a+((Ttop-x15m)*(v)*(FtopIn)+(X14-x15m)*(f2*FtopOut)+(ambientTemp-x15m)*u)/V15)+(sigma_x)*dw1)
@@ -71,7 +71,7 @@ make_model<-function(model, type = 'linear'){
     model$setParameter(v = c(init=1e-4,lb=0,ub=20))
 
 
-
+    model$setParameter(k1 = c(init=1,lb=-50, ub=50))
     model$setParameter(f2 = c(init=5e-1,lb=0,ub=200))
 
 

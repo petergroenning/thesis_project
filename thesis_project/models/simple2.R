@@ -96,21 +96,20 @@ make_model<-function(model, type = 'linear'){
         model$addSystem(dY2m~dt*(x2m-Y2m)*b+sigma_y*dwY)
         model$addSystem(dx2m~dt*((Y2m-x2m)*a+((X1-x2m)*(f1*(FbotIn))+(X3-x2m)*(f2*(FbotOut)))/V2)+(sigma_x)*dw1)
     }else if (type == 'model5'){
-        model$addSystem(dY2m~dt*(x2m-Y2m)*b-dt*u*Y2m+sigma_y*dwY)
+        model$addSystem(dY2m~dt*((x2m-Y2m)*b+(X1-Y2m)*k1+(X3-Y2m)*k2)+sigma_y*dwY)
         model$addSystem(dx2m~dt*((Y2m-x2m)*a+((X1-x2m)*(f1*(FbotIn))+(X3-x2m)*(f2*(FbotOut)))/V2)+(sigma_x)*dw1)
     }
     
     
     # Parameters
     # Parameters
-    model$setParameter(k1 = c(init=1,lb=-50,ub=50))
-    model$setParameter(k2 = c(init=1,lb=-50,ub=50))
+    model$setParameter(k1 = c(init=10,lb=0,ub=50))
+    model$setParameter(k2 = c(init=10,lb=0,ub=50))
     model$setParameter(f2 = c(init=5e-1,lb=0,ub=50))
     model$setParameter(f1 = c(init=5e-1,lb=0,ub=50))
 
     model$setParameter(a = c(init=1,lb=0,ub=10))
     model$setParameter(b = c(init=1e-4,lb=0,ub=10))
-    model$setParameter(u = c(init=1e-6,lb=0,ub=40))
 
     # Add Inputs
     model$addInput("X1","X3")

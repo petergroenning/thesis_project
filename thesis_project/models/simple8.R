@@ -95,12 +95,15 @@ make_model<-function(model, type = 'linear'){
     }else if (type == 'model4'){
         model$addSystem(dY8m~dt*((x8m-Y8m)*b)+sigma_y*dwY)
         model$addSystem(dx8m~dt*((Y8m-x8m)*a+((X7-x8m)*(f1*(FbotIn))+(X9-x8m)*(f2*(FbotOut)))/V8)+(sigma_x)*dw1)
+    }else if (type == 'model5'){
+        model$addSystem(dY8m~dt*((x8m-Y8m)*b+(X7-Y8m)*k1+(X9-Y8m)*k2)+sigma_y*dwY)
+        model$addSystem(dx8m~dt*((Y8m-x8m)*a+((X7-x8m)*(f1*FbotIn)+(X9-x8m)*(f2*FbotOut))/V8)+(sigma_x)*dw1)
     }
     
     # Parameters
     # model$setParameter(Y8m = c(init=8,lb=0,ub=200))
-    model$setParameter(k1 = c(init=1,lb=-50,ub=50))
-    model$setParameter(k2 = c(init=1,lb=-50,ub=50))
+    model$setParameter(k1 = c(init=10,lb=0,ub=50))
+    model$setParameter(k2 = c(init=10,lb=0,ub=50))
     model$setParameter(f2 = c(init=5e-1,lb=0,ub=50))
     model$setParameter(f1 = c(init=5e-1,lb=0,ub=50))
 

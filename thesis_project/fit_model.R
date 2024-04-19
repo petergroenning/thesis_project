@@ -10,10 +10,9 @@ source('thesis_project/R_scripts/nllikelihood.R')
 # layer <- 1
 # model_types <- c('linear_lag2', 'linear_lag3', 'linear1_lag1', 'linear1_lag2', 'linear1_lag3', 'nonlinear_lag1', 'nonlinear_lag2', 'nonlinear_lag3', 'nonlinear1_lag1', 'nonlinear1_lag2', 'nonlinear1_lag3')
 
-fit_model <- function(layer, model_type, fill_state = TRUE){
+fit_model <- function(layer, model_type, model_name, fill_state = TRUE){
     source('thesis_project/models/base_model.R')
 
-    model_name <- paste0('simple', layer)
     state <- paste0('X', layer)
     if (layer == 0){
         inputs <- paste0('X', layer+1)
@@ -35,18 +34,18 @@ fit_model <- function(layer, model_type, fill_state = TRUE){
     } else{
         model_type <- paste0(model_type, 'missing_obs')
     }    # Data
-    data <- make_data(start = '2017-02-01', end = '2017-12-01', fill=inputs)
+    data <- make_data(start = '2017-04-01', end = '2017-11-01', fill=inputs)
     model <- setInitialState(model, data)
 
     # model$options$solutionMethod <- 0
     model$options$eps <- 1e-6
     # model$options$nIEKF <- 1
 
-    fit <- makefit(model)
+    # fit <- makefit(model)
     
-    pars <- fit$xm[c(1,3,4,5,6,7,8,9,10,11)]
-    print(pars)
-    nllikelihood(pars, fit, data, firstorder=TRUE, c=3, n.ahead=1, printit=TRUE)
+    # pars <- fit$xm[c(1,3,4,5,6,7,8,9,10,11)]
+    # print(pars)
+    # nllikelihood(pars, fit, data, firstorder=TRUE, c=3, n.ahead=1, printit=TRUE)
 
     # res <- nlminb(start = pars, objective = nllikelihood, fit = fit, D = data, firstorder = TRUE, c = 3, n.ahead = 1, printit = FALSE, lower = 0, upper = 100)
     fit <- model$estimate(data = data, firstorder = TRUE)
@@ -94,13 +93,16 @@ fit_model <- function(layer, model_type, fill_state = TRUE){
 
 
 
-layers <- 0:15
-model_types <- c('model3','model4')
+layers <- 3
+model_types <- c('simple')
+
 for (layer in layers){
     print(layer)
     for (model_type in model_types){
         print(model_type)
-        fit<-fit_model(layer, model_type)
+        model_name <- paste0('simple', layer)
+
+        fit<-fit_model(layer, model_type, model_name = 'coupled')
         print(summary(fit))
     }
 }
@@ -114,8 +116,7 @@ fit
 # }
 # # summary(fit)
 # inputs <- c('X2','X4')
-# data <- make_data(start = '2017-02-01', end = '2017-12-01', fill=inputs)
-# p <- predict(fit, newdata = data, firstorderinputinterpolation=TRUE, n.ahead = 1)
+
 # pred <- p$output$pred
 # sd <- p$output$sd
 
@@ -141,3 +142,4 @@ fit
 # }
 # res_interval(50:7000)
 # summary(fit)
+

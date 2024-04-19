@@ -10,7 +10,7 @@ inputs = pd.read_csv('data/processed/dronninglund/inputs.csv', parse_dates=True,
 times = water_sensors.index
 
 
-d = np.linspace(0, 1, 16)
+d = np.linspace(0, 1, 17)
 
 def get_water_temp(idx):
     return water_sensors.iloc[idx]

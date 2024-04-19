@@ -11,7 +11,10 @@ make_model<-function(model, type = 'linear'){
     if (type == 'linear'){
         model$addSystem(dx3m~dt/V3*((x3m-X2)*(k1-f1*FbotIn)+(x3m-X4)*(k2+f2*FbotOut))+sigma_x*dw1)
 
-    } else if (type == 'linear1'){
+    } else if (type == 'simple'){
+        model$addSystem(dx3m~dt/V3*((X2-x3m)*(f1*FbotIn)+(X4-x3m)*(f2*FbotOut))+sigma_x*dw1)
+    }
+    else if (type == 'linear1'){
         model$addSystem(dx3m~dt/V3*((x3m-X2)*(k1-f1*FbotIn)+(x3m-X4)*(k1-f1*FbotOut))+sigma_x*dw1)
 
     } else if (type == 'nonlinear') {
@@ -95,7 +98,7 @@ make_model<-function(model, type = 'linear'){
         model$addSystem(dY3m~dt*(x3m-Y3m)*b+sigma_y*dwY)
         model$addSystem(dx3m~dt*((Y3m-x3m)*a+((X2-x3m)*(f1*(FbotIn))+(X4-x3m)*(f2*(FbotOut)))/V3)+(sigma_x)*dw1)
     }else if (type == 'model5'){
-        model$addSystem(dY3m~dt*(x3m-Y3m)*b-dt*u*Y3m+sigma_y*dwY)
+        model$addSystem(dY3m~dt*(x3m-Y3m)*b+sigma_y*dwY)
         model$addSystem(dx3m~dt*((Y3m-x3m)*a+((X2-x3m)*(f1*(FbotIn))+(X4-x3m)*(f2*(FbotOut)))/V3)+(sigma_x)*dw1)
     }
     
@@ -110,7 +113,7 @@ make_model<-function(model, type = 'linear'){
 
     model$setParameter(a = c(init=1,lb=0,ub=10))
     model$setParameter(b = c(init=1e-4,lb=0,ub=10))
-    model$setParameter(u = c(init=1e-6,lb=0,ub=40))
+
 
     # Add Inputs
     model$addInput("X2","X4")

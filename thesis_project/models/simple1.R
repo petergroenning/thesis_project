@@ -98,7 +98,7 @@ make_model<-function(model, type = 'linear'){
         model$addSystem(dY1m~dt*(x1m-Y1m)*b+sigma_y*dwY)
         model$addSystem(dx1m~dt*((Y1m-x1m)*a+((X0-x1m)*(f1*(FbotIn))+(X2-x1m)*(f2*(FbotOut)))/V1)+(sigma_x)*dw1)
     }else if (type == 'model5'){
-        model$addSystem(dY1m~dt*(x1m-Y1m)*b-dt*u*Y1m+sigma_y*dwY)
+        model$addSystem(dY1m~dt*((x1m-Y1m)*b+(X0-Y1m)*k1+(X2-Y1m)*k2)+sigma_y*dwY)
         model$addSystem(dx1m~dt*((Y1m-x1m)*a+((X0-x1m)*(f1*(FbotIn))+(X2-x1m)*(f2*(FbotOut)))/V1)+(sigma_x)*dw1)
     }
 
@@ -113,13 +113,12 @@ make_model<-function(model, type = 'linear'){
     # Hidden State
     model$setParameter(sigma_y = c(init=1e-2,lb=0,ub=1))
     # Parameters
-    model$setParameter(k1 = c(init=1,lb=-50,ub=50))
-    model$setParameter(k2 = c(init=1,lb=-50,ub=50))
+    model$setParameter(k1 = c(init=10,lb=0,ub=50))
+    model$setParameter(k2 = c(init=10,lb=0,ub=50))
     model$setParameter(f2 = c(init=5e-1,lb=0,ub=50))
     model$setParameter(f1 = c(init=5e-1,lb=0,ub=50))
 
     model$setParameter(a = c(init=1,lb=0,ub=10))
     model$setParameter(b = c(init=1e-4,lb=0,ub=10))
-    model$setParameter(u = c(init=1e-6,lb=0,ub=40))
-
+    model$setParameter(u = c(init=1e-4,lb=0,ub=10))
     return(model)}
