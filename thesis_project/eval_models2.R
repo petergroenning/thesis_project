@@ -18,8 +18,8 @@ load_model <- function(model_name){
 }
 
 
-layer <- 15
-types <- c('model3')
+layer <- 3
+types <- c('linear','nonlinear_lag3','test1','test2','test3', 'test4')
 # types <- c('model3','model4')
 
 model_name <- paste0('simple', layer)
@@ -75,7 +75,8 @@ res_interval <- function(interval){
     }
   
 }
-res_interval(1:7000) 
+
+res_interval(20:3000) 
 # par(mfrow = c(1,1))
 
 # summary(fits$model3)
@@ -87,7 +88,7 @@ test_sim <- function(interval = 1:7000){
     
     for (type in types){
         print(type)
-        s <- simulate(fits[[type]], newdata = fits[[type]]$data[[1]][interval,], firstorderinputinterpolation=TRUE)$state$sim[1:7000,2]
+        s <- simulate(fits[[type]], newdata = fits[[type]]$data[[1]][interval,], firstorderinputinterpolation=TRUE)$state$sim[interval,2]
         x <- fits[[type]]$data[[1]][interval,paste0('X', layer)]
         plot(s, col = 'red', type = 'l', main = paste0('Simulated ', type))
         points(x, col = 'blue')
@@ -98,7 +99,23 @@ test_sim <- function(interval = 1:7000){
 }
 
 
-# test_sim(1:7000)
+test_sim(1:1000)
+
+
+s <- simulate(fits$test3, newdata = fits$test2$data[[1]][1:3000,], firstorderinputinterpolation=TRUE)$state$sim[1:3000,1]
+plot(s)
+p <- predict(fits$test3, newdata = fits$test2$data[[1]][1:3000,], firstorderinputinterpolation=TRUE, n.ahead = 24*2*7)
+
+r <- p$output$pred$X3 -fits$test3$data[[1]][1:3000,]$X3
+r
+
+plot(r)
+# s1 <- simulate(fits$nl, newdata = fits$nl$data[[1]][1:3000,], firstorderinputinterpolation=TRUE)$state$sim[1:3000,1]
+# par(mfrow = c(2,1))
+# plot(s)
+# lines(fits$nl2$data[[1]][1:3000,]$X2, col = 'red')
+# points(s1)
+# sc <- simulate(fits$model1, newdata = fits$model1$data[[1]][1:7000,], firstorderinputinterpolation=TRUE)$state$sim[1:7000,1]
 # xc <- fits$modelc$data[[1]][1:7000,]$X2
 # plot(sc-xc, col = 'blue',ylim = c(-6,10))
 # sb <- simulate(fits$model1, newdata = fits$model1$data[[1]][1:7000,], firstorderinputinterpolation=TRUE)$state$sim[1:7000,1]

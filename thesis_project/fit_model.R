@@ -94,7 +94,7 @@ fit_model <- function(layer, model_type, model_name, fill_state = TRUE){
 
 
 layers <- 3
-model_types <- c('simple')
+model_types <- c('test4')
 
 for (layer in layers){
     print(layer)
@@ -102,7 +102,7 @@ for (layer in layers){
         print(model_type)
         model_name <- paste0('simple', layer)
 
-        fit<-fit_model(layer, model_type, model_name = 'coupled')
+        fit<-fit_model(layer, model_type, model_name = model_name)
         print(summary(fit))
     }
 }
