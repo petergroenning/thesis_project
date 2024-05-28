@@ -1,6 +1,6 @@
 library(ctsmr)
 
-data <- read.csv('data/processed/1m_data.csv')
+data <- read.csv('data/processed/1m_2_data.csv')
 model <- ctsm$new()
 
     #### Physical Parameters #####

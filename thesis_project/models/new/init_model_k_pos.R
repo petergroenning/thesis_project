@@ -1,6 +1,6 @@
 library(ctsmr)
 
-data <- read.csv('data/processed/1m_data.csv')
+data <- read.csv('data/processed/1m_2_data.csv')
 model <- ctsm$new()
 
     #### Physical Parameters #####
@@ -127,6 +127,7 @@ setInitialState <- function(model, data){
 
 data <- data[3000:7500,]
 model <- setInitialState(model, data)
+model$options$initialVarianceScaling <- 1e-5
 
 fit <- model$estimate(data, firstorder = TRUE)
 
@@ -136,6 +137,11 @@ write.csv(r, 'residuals/base_model_k_pos.csv')
 fit$loglik
 aic <- -2*fit$loglik + 2*(6)
 aic
+
+mean(t(r^2))
+
+a
+save(fit, file = 'models/k_neg1.Rdata')
 
 
 # p2 <- predict(fit, newdata = data, firstorderinputinterpolation=TRUE, n.ahead = 24*2*7)

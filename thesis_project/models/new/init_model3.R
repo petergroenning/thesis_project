@@ -1,6 +1,8 @@
 library(ctsmr)
 
 data <- read.csv('data/processed/1m_data.csv')
+data <- read.csv('data/processed/1m_2_data.csv') # 10 min data
+
 model <- ctsm$new()
 
     #### Physical Parameters #####
@@ -77,7 +79,7 @@ model <- ctsm$new()
     model$addSystem(dx12m~dt/V12*((x13m-x12m)*(FtopIn*exp(f))+(x11m-x12m)*(FtopOut*exp(f)))+exp(sigma_x)*dwx12)
     model$addSystem(dx13m~dt/V13*((x14m-x13m)*(FtopIn*exp(f))+(x12m-x13m)*(FtopOut*exp(f)))+exp(sigma_x)*dwx13)
     model$addSystem(dx14m~dt/V14*((x15m-x14m)*(FtopIn*exp(f))+(x13m-x14m)*(FtopOut*exp(f)))+exp(sigma_x)*dwx14)
-    model$addSystem(dx15m~dt/V15*((x15m-x14m)*(FtopIn*exp(f))+(Ttop-x15m)*(FtopIn*exp(vtop)))+exp(sigma_x)*dwx15)
+    model$addSystem(dx15m~dt/V15*((x14m-x15m)*(FtopOut*exp(f))+(Ttop-x15m)*(FtopIn*exp(vtop)))+exp(sigma_x)*dwx15)
 
 
 
@@ -135,3 +137,8 @@ write.csv(r, 'residuals/base_model3.csv')
 fit$loglik
 aic <- -2*fit$loglik + 2*(5)
 aic
+
+
+plot(r$X10)
+acf(r$X2)
+save(fit, file = 'models/base_model3.Rdata')

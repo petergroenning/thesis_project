@@ -1,6 +1,7 @@
 library(ctsmr)
-
-data <- read.csv('data/processed/1m_2_data.csv')
+data1 <- read.csv('data/processed/1m_data.csv') # 1 hour data
+data2 <- read.csv('data/processed/1m_2_data.csv') # 10 min data
+data <- read.csv('data/processed/1m_10m_2_data.csv') # 10 min data
 model <- ctsm$new()
 
     #### Physical Parameters #####
@@ -21,6 +22,43 @@ model <- ctsm$new()
     model$setParameter(V13 = 6465)
     model$setParameter(V14 = 7125)
     model$setParameter(V15 = 7816)
+
+    # Areas
+    model$setParameter(A0 = 697)
+    model$setParameter(A1 = 924)
+    model$setParameter(A2 = 1183)
+    model$setParameter(A3 = 1475)
+    model$setParameter(A4 = 1798)
+    model$setParameter(A5 = 2153)
+    model$setParameter(A6 = 2540)
+    model$setParameter(A7 = 2959)
+    model$setParameter(A8 = 3410)
+    model$setParameter(A9 = 3894)
+    model$setParameter(A10 = 4409)
+    model$setParameter(A11 = 4956)
+    model$setParameter(A12 = 5535)
+    model$setParameter(A13 = 6147)
+    model$setParameter(A14 = 6790)
+    model$setParameter(A15 = 7465)
+    model$setParameter(Atop = 8172)
+
+    # ides
+    model$setParameter(S0 = 114)
+    model$setParameter(S1 = 130)
+    model$setParameter(S2 = 146)
+    model$setParameter(S3 = 162)
+    model$setParameter(S4 = 178)
+    model$setParameter(S5 = 194)
+    model$setParameter(S6 = 210)
+    model$setParameter(S7 = 226)
+    model$setParameter(S8 = 242)
+    model$setParameter(S9 = 258)
+    model$setParameter(S10 = 274)
+    model$setParameter(S11 = 290)
+    model$setParameter(S12 = 306)
+    model$setParameter(S13 = 322)
+    model$setParameter(S14 = 338)
+    model$setParameter(S15 = 354)
 
     # Add observation equations and variances
     model$addObs(X0 ~ x0m)
@@ -62,48 +100,28 @@ model <- ctsm$new()
     obs_std <- 1/sqrt(12)*1.25e-4
     model$setParameter(sigma_X = obs_std)
 
-    model$addSystem(dx0m~dt/V0*((x1m-x0m)*(FbotOut*exp(f)+exp(k))+(Tbot-x0m)*(FbotIn*exp(vbot)))+exp(sigma_x)*dwx0)
-    model$addSystem(dx1m~dt/V1*((x2m-x1m)*(FbotOut*exp(f)+exp(k1))+(x0m-x1m)*(FbotIn*exp(f)+exp(k1)))+exp(sigma_x)*dwx1)
-    model$addSystem(dx2m~dt/V2*((x3m-x2m)*(FbotOut*exp(f)+exp(k1))+(x1m-x2m)*(FbotIn*exp(f)+exp(k1)))+exp(sigma_x)*dwx2)
-    model$addSystem(dx3m~dt/V3*((x4m-x3m)*(FbotOut*exp(f)+exp(k2))+(x2m-x3m)*(FbotIn*exp(f)+exp(k2)))+exp(sigma_x)*dwx3)
-    model$addSystem(dx4m~dt/V4*((x5m-x4m)*(FbotOut*exp(f)+exp(k2))+(x3m-x4m)*(FbotIn*exp(f)+exp(k2)))+exp(sigma_x)*dwx4)
-    model$addSystem(dx5m~dt/V5*((x6m-x5m)*(FbotOut*exp(f)+exp(k3))+(x4m-x5m)*(FbotIn*exp(f)+exp(k3)))+exp(sigma_x)*dwx5)
-    model$addSystem(dx6m~dt/V6*((x7m-x6m)*(FbotOut*exp(f)+exp(k3))+(x5m-x6m)*(FbotIn*exp(f)+exp(k3)))+exp(sigma_x)*dwx6)
-    model$addSystem(dx7m~dt/V7*((x8m-x7m)*(FbotOut*exp(f)+exp(k4))+(x6m-x7m)*(FbotIn*exp(f)+exp(k4)))+exp(sigma_x)*dwx7)
-    model$addSystem(dx8m~dt/V8*((x9m-x8m)*(FbotOut*exp(f)+exp(k4))+(x7m-x8m)*(FbotIn*exp(f)+exp(k4)))+exp(sigma_x)*dwx8)
-    model$addSystem(dx9m~dt/V9*((x10m-x9m)*(FbotOut*exp(f)+exp(k5))+(x8m-x9m)*(FbotIn*exp(f)+exp(k5)))+exp(sigma_x)*dwx9)
-    model$addSystem(dx10m~dt/V10*((x11m-x10m)*(FtopIn*exp(f)+exp(k5))+(x9m-x10m)*(FtopOut*exp(f)+exp(k5))+(Tmid-x10m)*FmidIn*exp(vmid))+exp(sigma_x)*dwx10)
-    model$addSystem(dx11m~dt/V11*((x12m-x11m)*(FtopIn*exp(f)+exp(k6))+(x10m-x11m)*(FtopOut*exp(f)+exp(k6)))+exp(sigma_x)*dwx11)
-    model$addSystem(dx12m~dt/V12*((x13m-x12m)*(FtopIn*exp(f)+exp(k6))+(x11m-x12m)*(FtopOut*exp(f)+exp(k6)))+exp(sigma_x)*dwx12)
-    model$addSystem(dx13m~dt/V13*((x14m-x13m)*(FtopIn*exp(f)+exp(k7))+(x12m-x13m)*(FtopOut*exp(f)+exp(k7)))+exp(sigma_x)*dwx13)
-    model$addSystem(dx14m~dt/V14*((x15m-x14m)*(FtopIn*exp(f)+exp(k7))+(x13m-x14m)*(FtopOut*exp(f)+exp(k7)))+exp(sigma_x)*dwx14)
-    model$addSystem(dx15m~dt/V15*((x14m-x15m)*(FtopOut*exp(f)+exp(k8))+(Ttop-x15m)*(FtopIn*exp(vtop)))+exp(sigma_x)*dwx15)
-
-
+    model$addSystem(dx0m~sigma_x*dwx1)
+    model$addSystem(dx1m~sigma_x*dwx2)
+    model$addSystem(dx2m~sigma_x*dwx3)
+    model$addSystem(dx3m~sigma_x*dwx4)
+    model$addSystem(dx4m~sigma_x*dwx5)
+    model$addSystem(dx5m~sigma_x*dwx6)
+    model$addSystem(dx6m~sigma_x*dwx7)
+    model$addSystem(dx7m~sigma_x*dwx8)
+    model$addSystem(dx8m~sigma_x*dwx9)
+    model$addSystem(dx9m~sigma_x*dwx10)
+    model$addSystem(dx10m~sigma_x*dwx11)
+    model$addSystem(dx11m~sigma_x*dwx12)
+    model$addSystem(dx12m~sigma_x*dwx13)
+    model$addSystem(dx13m~sigma_x*dwx14)
+    model$addSystem(dx14m~sigma_x*dwx15)
+    model$addSystem(dx15m~sigma_x*dwx16)
 
 
 
     # Inputs
-    model$addInput("Ttop", "Tbot", "Tmid", "FtopIn", "FmidIn", "FbotIn", "FtopOut", "FbotOut","FmidOut", "ambientTemp", "Ftop", "Fbot", "Fmid")
-
     model$setParameter(sigma_x=log(c(init=0.1,lb=1e-12,ub=1)))
 
-    model$setParameter(f=log(c(init=1,lb=1e-12,ub=10)))
-    model$setParameter(k=log(c(init=1,lb=1e-12,ub=10)))
-    model$setParameter(vtop=log(c(init=1,lb=1e-12,ub=10)))
-    model$setParameter(vmid=log(c(init=1,lb=1e-12,ub=10)))
-    model$setParameter(vbot=log(c(init=1,lb=1e-12,ub=10)))
-
-    model$setParameter(k1=log(c(init=1,lb=1e-12,ub=10)))
-    model$setParameter(k2=log(c(init=1,lb=1e-12,ub=10)))
-    model$setParameter(k3=log(c(init=1,lb=1e-12,ub=10)))
-    model$setParameter(k4=log(c(init=1,lb=1e-12,ub=10)))
-    model$setParameter(k5=log(c(init=1,lb=1e-12,ub=10)))
-    model$setParameter(k6=log(c(init=1,lb=1e-12,ub=10)))
-    model$setParameter(k7=log(c(init=1,lb=1e-12,ub=10)))
-    model$setParameter(k8=log(c(init=1,lb=1e-12,ub=10)))
-    
- 
 
 setParams <- function(model, fit){
     oldparams <- fit$xm[row.names(model$ParameterValues)]
@@ -132,17 +150,41 @@ setInitialState <- function(model, data){
     model$setParameter(x15m = data$X15[1])
     return(model)
 }
+set.seed(1)
+# data1 <- data1[3000:7500,] # 1 Hour data
+# data <- data[(3000*6):(7500*6),] # 10 min data
 
-data <- data[3000:7500,]
+data <- data2[3000:7500,] # 1 hour 
+
+# x <- rnorm(nrow(data), mean = 0, sd = 1)
+# t <- 0
+
+# # data[x>t, 2:17] <- NA
+# D <- data[4000:8000,]
 model <- setInitialState(model, data)
-model$options$initialVarianceScaling <- 1e-5
+# data[x > t, 2:17] <- NA
+head(data)
 
+model$options$initialVarianceScaling <- 1e-5
+# model$options$numberOfSubsamples <- 1
+data$t <- data$t 
 fit <- model$estimate(data, firstorder = TRUE)
 
 p <- predict(fit, newdata = data, firstorderinputinterpolation=TRUE, n.ahead = 1)
 r <- p$output$pred - data[c('X0','X1','X2','X3','X4','X5','X6','X7','X8','X9','X10','X11','X12','X13','X14','X15')]
-write.csv(r, 'residuals/base_model2.csv')
+# # # # write.csv(r, 'residuals/base_model1.csv')
+# # # # r <- read.csv('residuals/base_model1.csv')
 fit$loglik
-aic <- -2*fit$loglik + 2*(14)
+aic <- -2*fit$loglik + 2*(1)
 aic
-save(fit, file = 'models/base_model2.Rdata')
+fit$loglik
+# acf(r$X5, plot =FALSE)
+mean(t(r^2), na.rm = TRUE)
+
+save(fit, file = 'models/random')
+
+# acf(r$X13)
+# summary(fit)
+
+# plot(r$X1)
+
