@@ -187,20 +187,20 @@ makemodel <- function(type = 'basic', data = NULL){
     model$addSystem(dy6~dt*(x6-y6)*exp(mu_y6)+dwy6*exp(sigma_y))
 
     }else if (type == 'model4'){
-    model$addSystem(dx1~dt/V1*((Tbot-x1)*FbotIn*exp(vbot)+(x2-x1)*(FbotOut*exp(f))-exp(ubot)*(Abot+S1)*x1)+dt*(y1-x1)*exp(mu_x1)+dw1*exp(sigma_x))
-    model$addSystem(dx2~dt/V2*((x1-x2)*(FbotIn*exp(f))+(x3-x2)*(FbotOut*exp(f))-exp(u)*(S2)*x2)+dt*(y2-x2)*exp(mu_x1)+dw2*exp(sigma_x))
-    model$addSystem(dx3~dt/V3*((x2-x3)*(FbotIn*exp(f))+(x4-x3)*(FbotOut*exp(f))-exp(u)*(S3)*x3)+dt*(y3-x3)*exp(mu_x1)+dw3*exp(sigma_x))
-    model$addSystem(dx4~dt/V4*((x3-x4)*(FbotIn*exp(f))+(x5-x4)*(FbotOut*exp(f))-exp(u)*(S4)*x4+(Tmid-x4)*FmidIn*exp(vmid))+dt*(y4-x4)*exp(mu_x1)+dw4*exp(sigma_x))
-    model$addSystem(dx5~dt/V5*((x4-x5)*(FtopOut*exp(f))+(x6-x5)*(FtopIn*exp(f))-exp(u)*(S5)*x5)+dt*(y5-x5)*exp(mu_x1)+dw5*exp(sigma_x))
-    model$addSystem(dx6~dt/V6*((x5-x6)*(FtopOut*exp(f))+(Ttop-x6)*((FtopIn+a*dFtopIn)*exp(vtop))+exp(utop)*(ambientTemp-x6)*Atop)+dt*(y6-x6)*exp(mu_x6)+dw6*exp(sigma_x))
+    model$addSystem(dx1~dt/V1*((Tbot-x1)*FbotIn*exp(vbot)+(x2-x1)*(FbotOut*exp(f))-exp(ubot)*(Abot+S1)*x1)+dt*(y1-x1)*exp(mu_x)+dw1*exp(sigma_x))
+    model$addSystem(dx2~dt/V2*((x1-x2)*(FbotIn*exp(f))+(x3-x2)*(FbotOut*exp(f))-exp(u)*(S2)*x2)+dt*(y2-x2)*exp(mu_x)+dw2*exp(sigma_x))
+    model$addSystem(dx3~dt/V3*((x2-x3)*(FbotIn*exp(f))+(x4-x3)*(FbotOut*exp(f))-exp(u)*(S3)*x3)+dt*(y3-x3)*exp(mu_x)+dw3*exp(sigma_x))
+    model$addSystem(dx4~dt/V4*((x3-x4)*(FbotIn*exp(f))+(x5-x4)*(FbotOut*exp(f))-exp(u)*(S4)*x4+(Tmid-x4)*FmidIn*exp(vmid))+dt*(y4-x4)*exp(mu_x)+dw4*exp(sigma_x))
+    model$addSystem(dx5~dt/V5*((x4-x5)*(FtopOut*exp(f))+(x6-x5)*(FtopIn*exp(f))-exp(u)*(S5)*x5)+dt*(y5-x5)*exp(mu_x)+dw5*exp(sigma_x))
+    model$addSystem(dx6~dt/V6*((x5-x6)*(FtopOut*exp(f))+(Ttop-x6)*FtopIn*exp(vtop)+exp(utop)*(ambientTemp-x6)*Atop)+dt*(y6-x6)*exp(mu_x)+dw6*exp(sigma_x))
 
 
-    model$addSystem(dy1~dt*(x1-y1)*exp(mu_y1)+dwy1*exp(sigma_y))
-    model$addSystem(dy2~dt*(x2-y2)*exp(mu_y1)+dwy2*exp(sigma_y))
-    model$addSystem(dy3~dt*(x3-y3)*exp(mu_y1)+dwy3*exp(sigma_y))
-    model$addSystem(dy4~dt*(x4-y4)*exp(mu_y1)+dwy4*exp(sigma_y))
-    model$addSystem(dy5~dt*(x5-y5)*exp(mu_y1)+dwy5*exp(sigma_y))
-    model$addSystem(dy6~dt*(x6-y6)*exp(mu_y6)+dwy6*exp(sigma_y))
+    model$addSystem(dy1~dt*(x1-y1)*exp(mu_y)+dwy1*exp(sigma_y))
+    model$addSystem(dy2~dt*(x2-y2)*exp(mu_y)+dwy2*exp(sigma_y))
+    model$addSystem(dy3~dt*(x3-y3)*exp(mu_y)+dwy3*exp(sigma_y))
+    model$addSystem(dy4~dt*(x4-y4)*exp(mu_y)+dwy4*exp(sigma_y))
+    model$addSystem(dy5~dt*(x5-y5)*exp(mu_y)+dwy5*exp(sigma_y))
+    model$addSystem(dy6~dt*(x6-y6)*exp(mu_y)+dwy6*exp(sigma_y))
 
     }else if (type == 'model5'){
     model$addSystem(dx6~dt/V6*((X5-x6)*(FtopOut*exp(f))+(T-x6)*((FtopIn+a*dFtopIn)*exp(vtop)))+dt*(y6-x6)*exp(mu_x6)+dw6*exp(sigma_x))

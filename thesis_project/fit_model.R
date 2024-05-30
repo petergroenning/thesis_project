@@ -37,9 +37,12 @@ fit_model <- function(layer, model_type, model_name, fill_state = TRUE){
     data <- make_data(start = '2017-04-01', end = '2017-11-01', fill=inputs)
     model <- setInitialState(model, data)
 
-    # model$options$solutionMethod <- 0
+    model$options$solutionMethod <- 0
     model$options$eps <- 1e-6
-    # model$options$nIEKF <- 1
+    model$options$nIEKF <- 1
+    model$options$initialVarianceScaling <- 1e-6
+    model$options$odeeps <- 1e-3
+
 
     # fit <- makefit(model)
     
@@ -93,8 +96,8 @@ fit_model <- function(layer, model_type, model_name, fill_state = TRUE){
 
 
 
-layers <- 3
-model_types <- c('test4')
+layers <- 5
+model_types <- c('test')
 
 for (layer in layers){
     print(layer)
@@ -107,6 +110,7 @@ for (layer in layers){
     }
 }
 fit
+summary(fit)
 # layer <- 1
 # model_types <- c('nonlinear1_lag3')
 # for (model_type in model_types){

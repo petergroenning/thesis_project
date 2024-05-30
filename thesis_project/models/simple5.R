@@ -95,6 +95,10 @@ make_model<-function(model, type = 'linear'){
     }else if (type == 'model4'){
          model$addSystem(dY5m~dt*(x5m-Y5m)*b+sigma_y*dwY)
         model$addSystem(dx5m~dt*((Y5m-x5m)*a+((X4-x5m)*(f1*(FbotIn))+(X6-x5m)*(f2*(FbotOut)))/V5)+(sigma_x)*dw1)
+    }else if (type == 'test'){
+        # model$addSystem(dx5m~dt/V5*((X4-x5m)*(k1+f1*FbotIn)+(X6-x5m)*(k2+f2*FbotOut))+sigma_x*dw1)
+        model$addSystem(dx5m~dt/V5*((X6-x5m)*(X4-x5m))*exp(a)*Fbot/1000 +sigma_x*dw1)
+
     }
     
     # Parameters
@@ -104,7 +108,7 @@ make_model<-function(model, type = 'linear'){
     model$setParameter(f2 = c(init=5e-1,lb=0,ub=50))
     model$setParameter(f1 = c(init=5e-1,lb=0,ub=50))
 
-    model$setParameter(a = c(init=1,lb=0,ub=10))
+    model$setParameter(a = log(c(init=1,lb=1e-10,ub=10)))
     model$setParameter(b = c(init=1e-4,lb=0,ub=10))
     # Add Inputs
     model$addInput("X4","X6")
