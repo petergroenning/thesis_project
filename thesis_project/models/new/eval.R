@@ -1,7 +1,7 @@
 6
 
 
-types <- c('2state_model3')
+types <- c('2state_basic1','2state_model3','2state_model7')
 load_model <- function(model_name){
     load(model_name)
     return(fit)
@@ -38,13 +38,13 @@ for (type in types){
     # state <- p$state$pred[,1]
     sd <- p$output$sd
     # r <- pred - D[c('X1','X2','X3','X4','X5','X6','X7','X8','X9')]
-    r <- pred -  D[c('X1','X2','X3','X4','X5','X6','X7')]
+    r <- pred -  D[c('X1','X2','X3','X4','X5','X6')]
     # r <- pred -  D[c('X0','X1','X2','X3','X4','X5','X6','X7','X8','X9','X10','X11','X12','X13','X14','X15')]
     preds[[type]] <- pred
     sds[[type]] <- sd
     res[[type]] <- r
     # true[[type]] <- D[c('X1','X2','X3','X4','X5','X6','X7','X8','X9')]
-    true[[type]] <- D[c('X1','X2','X3','X4','X5','X6','X7')]
+    true[[type]] <- D[c('X1','X2','X3','X4','X5','X6')]
     # true[[type]] <- D[c('X0','X1','X2','X3','X4','X5','X6','X7','X8','X9','X10','X11','X12','X13','X14','X15')]
 
     # save residuls and sd
@@ -85,7 +85,7 @@ res_interval <- function(interval, name = 'X1'){
 
 }
 
-res_interval(20:4500, 'X7')
+# res_interval(1:nrow(D), 'X6')
 # r <- read.csv('residuals/ctsm2/augmented_3_1.csv')
 
 # acf(r$X2[20:4000])
@@ -168,48 +168,129 @@ res_interval(20:4500, 'X7')
 # write.csv(df, 'cp.csv')
 # # sim <- simulate(fits$'2state_model3',  newdata = D, firstorderinputinterpolation=TRUE)
 # # pred <- predict(fits$'2state_model3', newdata = D, firstorderinputinterpolation=TRUE, n.ahead = 7*24)
-# data <- read.csv('data/processed/data2.csv')
+data <- read.csv('data/processed/data2.csv')
 
 
 # plot(data$X1, type = 'l')
 D <- data[19500:26000,]
-D <- data[3000:7500,]
+# D <- data[3000:7500,]
 # plot(D$X1)
 
 
-fit <- fits$'2state_model3'
-x0 <- as.numeric(D[1,2:7])
+# fit <- load_model('models/2state_model3.Rdata')
+# x0 <- as.numeric(D[1,2:7])
 # fit$xm
-# # names(x0) <- names(fit$xm[1:6])
-fit$xm[1:6] <- x0
-fit$xm[7:12] <- x0
-# fit$xm
-p1d <- predict(fit, newdata = D, firstorderinputinterpolation=TRUE, n.ahead = 1*24)
-write.csv(p1d$output$pred, 'predictions/train_p1d.csv')
+# # # names(x0) <- names(fit$xm[1:6])
+# fit$xm[1:6] <- x0
+# fit$xm[7:12] <- x0
+# # # fit$xm
+
+# p1step <- predict(fit, newdata = D, firstorderinputinterpolation=TRUE, n.ahead = 1, covariance = TRUE)
+# write.csv(p1step$state$pred, 'predictions/results/p_1step.csv')
+# write.csv(p1step$output$sd, 'predictions/results/sd_obs_1step.csv')
+# write.csv(p1step$state$sd, 'predictions/results/sd_state_1step.csv')
+
+# mu <- p1step$state$pred
+# cov <- p1step$state$var
+
+# p1d <- predict(fit, newdata = D, firstorderinputinterpolation=TRUE, n.ahead = 1*24, covariance = TRUE)
+# write.csv(p1d$state$pred, 'predictions/results/p_1d.csv')
+# write.csv(p1d$output$sd, 'predictions/results/sd_obs_1d.csv')
+# write.csv(p1d$state$sd, 'predictions/results/sd_state_1d.csv')
+
+# p2d <- predict(fit, newdata = D, firstorderinputinterpolation=TRUE, n.ahead = 2*24,covariance = TRUE)
+
+# write.csv(p2d$state$pred, 'predictions/results/p_2d.csv')
+# write.csv(p2d$output$sd, 'predictions/results/sd_obs_2d.csv')
+# write.csv(p2d$state$sd, 'predictions/results/sd_state_2d.csv')
+
+# p3d <- predict(fit, newdata = D, firstorderinputinterpolation=TRUE, n.ahead = 3*24)
+# write.csv(p3d$state$pred, 'predictions/results/p_3d.csv')
+# write.csv(p3d$output$sd, 'predictions/results/sd_obs_3d.csv')
+# write.csv(p3d$state$sd, 'predictions/results/sd_state_3d.csv')
+
+# p4d <- predict(fit, newdata = D, firstorderinputinterpolation=TRUE, n.ahead = 4*24)
+# write.csv(p4d$state$pred, 'predictions/results/p_4d.csv')
+# write.csv(p4d$output$sd, 'predictions/results/sd_obs_4d.csv')
+# write.csv(p4d$state$sd, 'predictions/results/sd_state_4d.csv')
 
 
-p2d <- predict(fit, newdata = D, firstorderinputinterpolation=TRUE, n.ahead = 2*24)
-write.csv(p2d$output$pred, 'predictions/train_p2d.csv')
+# p1w <- predict(fit, newdata = D, firstorderinputinterpolation=TRUE, n.ahead = 7*24)
+# write.csv(p1w$state$pred, 'predictions/results/p_1w.csv')
+# write.csv(p1w$output$sd, 'predictions/results/sd_obs_1w.csv')
+# write.csv(p1w$state$sd, 'predictions/results/sd_state_1w.csv')
 
 
-p3d <- predict(fit, newdata = D, firstorderinputinterpolation=TRUE, n.ahead = 3*24)
-write.csv(p3d$output$pred, 'predictions/train_p3d.csv')
+# p2w <- predict(fit, newdata = D, firstorderinputinterpolation=TRUE, n.ahead = 14*24)
+# write.csv(p2w$state$pred, 'predictions/results/p_2w.csv')
+# write.csv(p2w$output$sd, 'predictions/results/sd_obs_2w.csv')
+# write.csv(p2w$state$sd, 'predictions/results/sd_state_2w.csv')
 
 
-p1w <- predict(fit, newdata = D, firstorderinputinterpolation=TRUE, n.ahead = 7*24)
-write.csv(p1w$output$pred, 'predictions/train_p1w.csv')
 
 
-p2w <- predict(fit, newdata = D, firstorderinputinterpolation=TRUE, n.ahead = 14*24)
-write.csv(p2w$output$pred, 'predictions/train_p2w.csv')
+
+# p1d <- predict(fit, newdata = D, firstorderinputinterpolation=TRUE, n.ahead = 1*24)
+# write.csv(p1d$output$pred, 'predictions/train_p1d.csv')
 
 
-p1m <- predict(fit, newdata = D, firstorderinputinterpolation=TRUE, n.ahead = 30*24)
-write.csv(p1m$output$pred, 'predictions/train_p1m.csv')
+# p2d <- predict(fit, newdata = D, firstorderinputinterpolation=TRUE, n.ahead = 2*24)
+# write.csv(p2d$output$pred, 'predictions/train_p2d.csv')
 
 
-sim <- simulate(fit,  newdata = D, firstorderinputinterpolation=TRUE)
-write.csv(sim$output$sim, 'predictions/train_sim.csv')
+# p3d <- predict(fit, newdata = D, firstorderinputinterpolation=TRUE, n.ahead = 3*24)
+# write.csv(p3d$output$pred, 'predictions/train_p3d.csv')
 
 
-head(D)
+# p1w <- predict(fit, newdata = D, firstorderinputinterpolation=TRUE, n.ahead = 7*24)
+# write.csv(p1w$output$pred, 'predictions/train_p1w.csv')
+
+
+# p2w <- predict(fit, newdata = D, firstorderinputinterpolation=TRUE, n.ahead = 14*24)
+# write.csv(p2w$output$pred, 'predictions/train_p2w.csv')
+
+
+# p1m <- predict(fit, newdata = D, firstorderinputinterpolation=TRUE, n.ahead = 30*24)
+# write.csv(p1m$output$pred, 'predictions/train_p1m.csv')
+
+
+# sim <- simulate(fit,  newdata = D, firstorderinputinterpolation=TRUE)
+# write.csv(sim$output$sim, 'predictions/train_sim.csv')
+
+
+# head(D)
+
+
+# idx <- 100
+
+# mu <- p1d$state$pred
+# cov <- p1d$state$var
+
+# mean <- as.numeric(mu[idx,1:6])
+# acov <- as.numeric(cov[1:6,1:6,idx])
+# acov <- matrix(acov, nrow = 6, ncol = 6)
+
+# x <- mvtnorm::rmvnorm(1000, mean = mean, sigma = acov)
+
+
+# par(mfcol=c(3,2))
+# for (i in 1:6){
+#     hist(x[,i], main = paste0('X',i))
+#     abline(v = D[idx,i+1], col = 'red')
+# }
+
+
+# par(mfrow = c(1,1))
+# xmin <- apply(x,2,quantile, probs = 0.025)
+# xmax <- apply(x,2,quantile, probs = 0.975)
+# xsd <- apply(x,2,sd)
+
+# plot(mean)
+# lines(xmin)
+# lines(xmax)
+# lines(qnorm(0.025, mean = mean, sd = sqrt(diag(acov))))
+# points(as.numeric(D[idx,2:7]), col = 'red')
+
+
+
+# acov
